@@ -59,7 +59,7 @@ export default function HomePageProducts() {
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
                         <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
                             <img
-                                src={`http://localhost:8000/${product.thumbnail}`}
+                                src={`http://194.110.55.21:8000/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />

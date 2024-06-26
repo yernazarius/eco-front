@@ -31,7 +31,7 @@ const CreateProduct = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/categories');
+            const response = await axios.get('http://194.110.55.21:8000/categories');
             setCategories(response.data.data);
         } catch (error) {
             console.error('Error fetching categories', error);

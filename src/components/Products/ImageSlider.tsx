@@ -20,7 +20,7 @@ const ImageSlider = ({ thumbnail, images }: ImageSliderProps) => {
         <div ref={sliderRef} className="keen-slider h-[34rem]	">
             {allImages.map((src, index) => (
                 <div key={index} className="keen-slider__slide number-slide">
-                    <img className="h-full flex self-center mx-auto" src={`http://localhost:8000/${src}`} alt={`Product Image ${index + 1}`} />
+                    <img className="h-full flex self-center mx-auto" src={`http://194.110.55.21:8000/${src}`} alt={`Product Image ${index + 1}`} />
                 </div>
             ))}
         </div>

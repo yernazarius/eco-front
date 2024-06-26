@@ -114,7 +114,7 @@ export default function ProductsPage() {
                                 <Link key={product.id} href={`/products/${product.id}`} passHref>
                                     <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer">
                                         <img
-                                            src={`http://localhost:8000/${product.thumbnail}`}
+                                            src={`http://194.110.55.21:8000/${product.thumbnail}`}
                                             alt={product.title}
                                             className="w-full h-48 object-cover rounded mb-4"
                                         />

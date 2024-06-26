@@ -202,7 +202,7 @@ const AdminUpdateProductsPage = () => {
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
                             <img
-                                src={`http://localhost:8000/${product.thumbnail}`}
+                                src={`http://194.110.55.21:8000/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />
