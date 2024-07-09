@@ -20,7 +20,7 @@ const HeroIcons: React.FC = () => {
         { icon: '/home_images/home_icons/hero-1.png', text: 'Бесплатная онлайн консультация' },
         { icon: '/home_images/home_icons/hero-2.png', text: 'Гарантия на все товары' },
         { icon: '/home_images/home_icons/hero-3.png', text: 'Быстрая отгрузка и доставка' },
-        { icon: '/home_images/home_icons/hero-4.png', text: 'Доставка по всей России' },
+        { icon: '/home_images/home_icons/hero-4.png', text: 'Доставка по всему Казахстану' },
         { icon: '/home_images/home_icons/hero-5.png', text: 'Поверка СИ' },
     ];
 
