@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie'
+import config from '@/config/config';
+
 
 export enum EnumTokens {
     'ACCESS_TOKEN' = 'access_token',
@@ -24,17 +26,32 @@ export const getAccessToken = () => {
 
 
 export const saveTokenStorage = (accessToken: string) => {
-    Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-        domain: '194.110.55.21',  // Replace with your actual domain
-        sameSite: 'strict',
-        expires: 1,
-        path: '/'  // Ensure the cookie is available for the entire domain
-    })
+    if (config.MODE === 'development') {
+        Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
+            domain: config.BASE_URL,
+            sameSite: 'strict',
+            expires: 1,
+        })
+    }
+    else if (config.MODE === 'production') {
+        Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
+            domain: config.BASE_URL,
+            sameSite: 'strict',
+            expires: 1,
+            path: '/'
+        })
+    }
 }
 
 export const removeFromStorage = () => {
-    Cookies.remove(EnumTokens.ACCESS_TOKEN, {
-        domain: '194.110.55.21',  // Ensure the domain is specified when removing the cookie
-        path: '/'  // Ensure the path is specified when removing the cookie
-    })
+    if (config.MODE === 'development') {
+        Cookies.remove(EnumTokens.ACCESS_TOKEN)
+    }
+    else if (config.MODE === 'production') {
+        Cookies.remove(EnumTokens.ACCESS_TOKEN, {
+            domain: config.BASE_URL,
+            path: '/'
+        })
+    }
+
 }

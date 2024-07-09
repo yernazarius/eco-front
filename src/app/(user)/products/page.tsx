@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { AxiosDefault } from '@/api/interceptors';
 import Link from 'next/link';
+import config from '@/config/config';
 
 interface Product {
     id: number;
@@ -34,6 +35,8 @@ export default function ProductsPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchResults, setSearchResults] = useState<Product[]>([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -41,6 +44,7 @@ export default function ProductsPage() {
                 const response = await AxiosDefault.get('/products');
                 console.log('Products:', response.data);
                 setProducts(response.data.data);
+                setSearchResults(response.data.data);
             } catch (error) {
                 console.error('Ошибка при загрузке продуктов:', error);
             } finally {
@@ -66,9 +70,19 @@ export default function ProductsPage() {
         setSelectedCategory(categoryId);
     };
 
+    const handleSearch = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const response = await AxiosDefault.get(`/products/?search=${searchQuery}`);
+            setSearchResults(response.data.data);
+        } catch (error) {
+            console.error('Ошибка при поиске продуктов:', error);
+        }
+    };
+
     const filteredProducts = selectedCategory
-        ? products.filter(product => product.category_id === selectedCategory)
-        : products;
+        ? searchResults.filter(product => product.category_id === selectedCategory)
+        : searchResults;
 
     if (loading) {
         return (
@@ -109,12 +123,22 @@ export default function ProductsPage() {
                             <ShoppingCart className="w-8 h-8 mr-2" />
                             Продукция
                         </h1>
+                        <form onSubmit={handleSearch} className="mb-8 flex justify-center">
+                            <input
+                                type="text"
+                                placeholder="Search by name..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="px-4 py-2 border rounded-md w-1/2"
+                            />
+                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Search</button>
+                        </form>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredProducts.map(product => (
                                 <Link key={product.id} href={`/products/${product.id}`} passHref>
                                     <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer">
                                         <img
-                                            src={`http://194.110.55.21:8000/${product.thumbnail}`}
+                                            src={`${config.BASE_URL}/${product.thumbnail}`}
                                             alt={product.title}
                                             className="w-full h-48 object-cover rounded mb-4"
                                         />

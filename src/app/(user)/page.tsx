@@ -11,10 +11,10 @@ export default function Home() {
   return <>
     <HomeSlider />
     <HeroIcons />
-    <div className="h-1 border-t border-solid	my-8"></div>
+    {/* <div className="h-1 border-t border-solid	my-8"></div>
     <HomeAboutUs />
     <div className="h-1 border-t border-solid	my-8"></div>
-    <ServiceCards />
+    <ServiceCards /> */}
     <div className="h-1 border-t border-solid	my-8"></div>
     <HomePopularProducts />
     <div className="h-1 border-t border-solid	my-8"></div>

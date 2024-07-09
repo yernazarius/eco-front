@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { AxiosDefault } from '@/api/interceptors';
 import Link from 'next/link';
+import config from '@/config/config';
 
 interface Product {
     id: number;
@@ -30,6 +31,10 @@ export default function HomePageProducts() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                console.log('Environment:', process.env.BASE_URL);
+                console.log('Mode:', config.MODE);
+                console.log('Base URL:', config.BASE_URL);
+
                 const response = await AxiosDefault.get('/products/?page=1&limit=10');
                 console.log('Products:', response.data);
                 setProducts(response.data.data);
@@ -59,7 +64,7 @@ export default function HomePageProducts() {
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
                         <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
                             <img
-                                src={`http://194.110.55.21:8000/${product.thumbnail}`}
+                                src={`${config.BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />

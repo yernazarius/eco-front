@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
 import Header from '@/components/Header';
 import Link from 'next/link';
+import config from '@/config/config';
+
 
 interface Product {
     id: number;
@@ -71,7 +73,7 @@ const AdminDeleteProductsPage = () => {
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
                             <img
-                                src={`http://194.110.55.21:8000/${product.thumbnail}`}
+                                src={`${config.BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />

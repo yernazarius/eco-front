@@ -3,7 +3,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShoppingCart } from 'lucide-react';
-import { axiosWithAuth } from '@/api/interceptors';
+import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
+import config from '@/config/config';
+
 
 interface Category {
     id: number;
@@ -31,7 +33,7 @@ const CreateProduct = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://194.110.55.21:8000/categories');
+            const response = await AxiosDefault.get('/categories');
             setCategories(response.data.data);
         } catch (error) {
             console.error('Error fetching categories', error);

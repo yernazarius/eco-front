@@ -4,6 +4,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { AxiosDefault } from '@/api/interceptors';
 import Header from '@/components/Header';
+import config from '@/config/config';
 
 interface Blog {
     id: number;
@@ -45,7 +46,7 @@ const BlogsPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {blogs.map((blog) => (
                     <div key={blog.id} className="bg-white p-6 rounded-lg shadow-lg">
-                        <img src={`http://194.110.55.21:8000/${blog.image}`} alt={blog.title} className="w-full h-48 object-cover mb-4 rounded" />
+                        <img src={`${config.BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-48 object-cover mb-4 rounded" />
                         {/* <div className="text-gray-600 text-sm mb-2">{new Date(blog.createdAt).toLocaleDateString()}</div> */}
                         <h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
                         <p className="text-gray-700">{blog.text.slice(0, 100)}...</p>

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
 import Header from '@/components/Header';
 import Link from 'next/link';
+import config from '@/config/config';
+
 
 interface Blog {
     id: number;
@@ -65,7 +67,7 @@ const AdminDeleteBlogPage = () => {
                 <div className="space-y-6">
                     {blogs.map(blog => (
                         <div key={blog.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-                            <img src={`http://194.110.55.21:8000/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                            <img src={`${config.BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                             <p className="text-lg font-semibold text-gray-800">{blog.title}</p>
                             <button
                                 onClick={() => handleDelete(blog.id)}

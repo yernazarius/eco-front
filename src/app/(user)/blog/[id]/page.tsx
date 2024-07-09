@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import { AxiosDefault } from '@/api/interceptors';
+import config from '@/config/config';
 
 interface Blog {
     id: number;
@@ -73,7 +74,7 @@ const BlogPage = () => {
                             <i className="far fa-clock"></i> Время чтения: 2 минуты
                         </div>
                     </div>
-                    <img src={`http://194.110.55.21:8000/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                    <img src={`${config.BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                     <p className="text-gray-700 mb-6">{blog.text}</p>
                 </div>
                 <div className="mt-10">

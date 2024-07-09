@@ -6,9 +6,10 @@ import {
     removeFromStorage
 } from '@/services/auth-token.service';
 import { authService } from '@/services/auth.service';
+import config from '@/config/config';
 
 const options: CreateAxiosDefaults = {
-    baseURL: 'http://194.110.55.21:8000',
+    baseURL: config.BASE_URL, // Use the BASE_URL from config
     withCredentials: true
 };
 
@@ -33,8 +34,6 @@ const AxiosDefault = axios.create({
         'Content-Type': 'application/json'
     }
 });
-
-
 
 axiosWithAuth.interceptors.request.use(config => {
     const accessToken = getAccessToken();
