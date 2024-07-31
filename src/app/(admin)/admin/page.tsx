@@ -1,15 +1,14 @@
-"use client";
-import { useEffect, useState } from 'react';
+"use client"
+import AdminManage from '@/components/Admin/AdminManage'
+import Loader from '@/components/Loader'
 import { useProfile } from '@/hooks/useProfile'
-import Loader from '@/components/Loader';
-import Link from 'next/link';
-import AdminManage from '@/components/Admin/AdminManage';
+import { useState } from 'react'
 
 export default function AdminPage() {
     const { data, isLoading } = useProfile()
     console.log(data)
 
-    const [errorText, setErrorText] = useState('');
+    const [errorText, setErrorText] = useState('')
     const paths = [
         {
             category: "catalog", items: [
@@ -31,12 +30,19 @@ export default function AdminPage() {
                 { title: "Удалить блог", desc: "Управляйте удалением блога", link: "delete-blog" },
                 { title: "Обновить блог", desc: "Управляйте обновлением блога", link: "update-blog" },
             ]
+        },
+        {
+            category: "header elements", items: [
+                { title: "Добавить элемент в шапку", desc: "Управляйте добавлением элементов в шапку", link: "create-header-tab" },
+                { title: "Добавить подэлемент в шапку", desc: "Управляйте добавлением подэлементов в шапку", link: "create-header-tab" }
+            ]
         }
-    ];
+
+    ]
 
     const user = {
         name: "Ecoinstrument Admin" // Replace with dynamic data if needed
-    };
+    }
 
     return isLoading ? (
         <Loader />
@@ -61,5 +67,5 @@ export default function AdminPage() {
                 </div>
             ))}
         </div>
-    );
+    )
 }

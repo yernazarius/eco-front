@@ -1,45 +1,91 @@
-"use client";
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { AxiosDefault } from '@/api/interceptors';
-import config from '@/config/config';
+"use client"
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { AxiosDefault } from '@/api/interceptors'
+import config from '@/config/config'
+
+interface HeaderTab {
+    id: number
+    name: string
+}
+interface SubHeaderTab {
+    id: number
+    name: string
+    header_tab_id: number
+    header_tab: {
+        id: number
+        name: string
+    }
+}
 
 const Header = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('')
+    const [searchResults, setSearchResults] = useState([])
+    const [showDropdown, setShowDropdown] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+    const [subHeaderTabs, setSubHeaderTabs] = useState<SubHeaderTab[]>([])
+    const [headerTabs, setHeaderTabs] = useState<HeaderTab[]>([])
+
+
+    useEffect(() => {
+        const fetchHeaderTabs = async () => {
+            try {
+                const response = await AxiosDefault.get('/header_tabs')
+                console.log('HeaderTabs:', response.data)
+                setHeaderTabs(response.data.data)
+            } catch (error) {
+                console.error('Ошибка при загрузке категорий:', error)
+            }
+        }
+        const fetchSubHeaderTabs = async () => {
+            try {
+                const response = await AxiosDefault.get('/sub_header_tabs')
+                console.log('SubHeaderTabs:', response.data.data)
+                setSubHeaderTabs(response.data.data)
+            } catch (error) {
+                console.error('Ошибка при загрузке категорий:', error)
+            }
+        }
+
+        fetchHeaderTabs()
+        fetchSubHeaderTabs()
+    }, [])
+
+    const handleCategoryClick = (categoryId: number) => {
+        setSelectedCategory(prevCategoryId => prevCategoryId === categoryId ? null : categoryId)
+    }
 
     const handleSearch = async (event: React.FormEvent) => {
-        event.preventDefault();
+        event.preventDefault()
         if (searchQuery.trim() === '') {
-            setSearchResults([]);
-            setShowDropdown(false);
-            return;
+            setSearchResults([])
+            setShowDropdown(false)
+            return
         }
 
         try {
-            const response = await AxiosDefault.get(`/products/?search=${searchQuery}`);
-            setSearchResults(response.data.data);
-            setShowDropdown(true);
+            const response = await AxiosDefault.get(`/products/?search=${searchQuery}`)
+            setSearchResults(response.data.data)
+            setShowDropdown(true)
         } catch (error) {
-            console.error('Error fetching search results:', error);
-            setShowDropdown(false);
+            console.error('Error fetching search results:', error)
+            setShowDropdown(false)
         }
-    };
+    }
 
     const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
+        setSearchQuery(event.target.value)
         if (event.target.value.trim() === '') {
-            setSearchResults([]);
-            setShowDropdown(false);
+            setSearchResults([])
+            setShowDropdown(false)
         }
-    };
+    }
 
     const handleResultClick = () => {
-        setShowDropdown(false);
-        setSearchQuery('');
-    };
+        setShowDropdown(false)
+        setSearchQuery('')
+    }
 
     return (
         <header className="container mx-auto px-20">
@@ -143,9 +189,34 @@ const Header = () => {
                 <Link href="/promotions" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Акции</Link>
                 <Link href="/news" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Новости</Link>
                 <Link href="/contacts" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Контакты</Link>
+                {headerTabs.map(headerTab => (
+                    <div key={headerTab.id} className="">
+                        <button
+                            onClick={() => handleCategoryClick(headerTab.id)}
+                            className={`mb-2 ${selectedCategory === headerTab.id ? 'font-bold' : ''}`}
+                        >
+                            <span className="text-gray-800 hover:text-gray-600">
+                                {headerTab.name}
+                            </span>
+                        </button>
+                        {selectedCategory === headerTab.id && (
+                            <div className="absolute z-40 left-0 mt-2 w-full bg-white shadow-lg ">
+                                {subHeaderTabs.filter(subHeaderTab => subHeaderTab.header_tab_id === headerTab.id).map(subHeaderTab => (
+                                    <Link
+                                        key={subHeaderTab.id}
+                                        href="#"
+                                        className="block px-4 py-2 text-gray-800 w-1/4 hover:bg-gray-200"
+                                    >
+                                        {subHeaderTab.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </nav>
         </header>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header
