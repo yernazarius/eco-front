@@ -6,7 +6,7 @@ import {
     removeFromStorage
 } from '@/services/auth-token.service'
 import { authService } from '@/services/auth.service'
-import config from '@/config/config'
+// import config from '@/config/config'
 
 const options: CreateAxiosDefaults = {
     baseURL: process.env.NEXT_PUBLIC_BASE_URL, // Use the BASE_URL from config
