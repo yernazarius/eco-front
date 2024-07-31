@@ -31,9 +31,6 @@ export default function HomePageProducts() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                console.log('Environment:', process.env.BASE_URL)
-                console.log('Mode:', config.MODE)
-                console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL)
 
                 const response = await AxiosDefault.get('/products/?page=1&limit=10')
                 console.log('Products:', response.data)

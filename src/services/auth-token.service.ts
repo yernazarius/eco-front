@@ -26,32 +26,32 @@ export const getAccessToken = () => {
 
 
 export const saveTokenStorage = (accessToken: string) => {
-    if (config.MODE === 'development') {
-        Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-            domain: process.env.NEXT_PUBLIC_BASE_URL,
-            sameSite: 'strict',
-            expires: 1,
-        })
-    }
-    else if (config.MODE === 'production') {
-        Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-            domain: process.env.NEXT_PUBLIC_BASE_URL,
-            sameSite: 'strict',
-            expires: 1,
-            path: '/'
-        })
-    }
+    // if (config.MODE === 'development') {
+    //     Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
+    //         domain: process.env.NEXT_PUBLIC_BASE_URL,
+    //         sameSite: 'strict',
+    //         expires: 1,
+    //     })
+    // }
+    // else if (config.MODE === 'production') {
+    Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
+        domain: process.env.NEXT_PUBLIC_BASE_URL,
+        sameSite: 'strict',
+        expires: 1,
+        path: '/'
+    })
+    // }
 }
 
 export const removeFromStorage = () => {
-    if (config.MODE === 'development') {
-        Cookies.remove(EnumTokens.ACCESS_TOKEN)
-    }
-    else if (config.MODE === 'production') {
-        Cookies.remove(EnumTokens.ACCESS_TOKEN, {
-            domain: process.env.NEXT_PUBLIC_BASE_URL,
-            path: '/'
-        })
-    }
+    // if (config.MODE === 'development') {
+    //     Cookies.remove(EnumTokens.ACCESS_TOKEN)
+    // }
+    // else if (config.MODE === 'production') {
+    Cookies.remove(EnumTokens.ACCESS_TOKEN, {
+        domain: process.env.NEXT_PUBLIC_BASE_URL,
+        path: '/'
+    })
+    // }
 
 }
