@@ -1,55 +1,52 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
-import Header from '@/components/Header';
-import Link from 'next/link';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import { useEffect, useState } from 'react'
 
 
 interface Blog {
-    id: number;
-    title: string;
-    image: string;
+    id: number
+    title: string
+    image: string
 }
 
 const AdminDeleteBlogPage = () => {
-    const [blogs, setBlogs] = useState<Blog[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [blogs, setBlogs] = useState<Blog[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await AxiosDefault.get('/blogs');
-                console.log('response:', response.data.data);
-                setBlogs(response.data.data);
+                const response = await AxiosDefault.get('/blogs')
+                console.log('response:', response.data.data)
+                setBlogs(response.data.data)
             } catch (error) {
-                setError('Ошибка при загрузке новостей');
-                console.error('Ошибка при загрузке новостей :', error);
+                setError('Ошибка при загрузке новостей')
+                console.error('Ошибка при загрузке новостей :', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
-        fetchBlogs();
-    }, []);
+        fetchBlogs()
+    }, [])
 
     const handleDelete = async (blogId: number) => {
         try {
-            await axiosWithAuth.delete(`/blogs/${blogId}`);
-            setBlogs(blogs.filter(blog => blog.id !== blogId));
+            await axiosWithAuth.delete(`/blogs/${blogId}`)
+            setBlogs(blogs.filter(blog => blog.id !== blogId))
         } catch (error) {
-            setError('Ошибка при удалении новостей');
-            console.error('Ошибка при удалении новостей:', error);
+            setError('Ошибка при удалении новостей')
+            console.error('Ошибка при удалении новостей:', error)
         }
-    };
+    }
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     if (error) {
@@ -57,7 +54,7 @@ const AdminDeleteBlogPage = () => {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-red-500">{error}</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -67,7 +64,7 @@ const AdminDeleteBlogPage = () => {
                 <div className="space-y-6">
                     {blogs.map(blog => (
                         <div key={blog.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-                            <img src={`${config.BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                             <p className="text-lg font-semibold text-gray-800">{blog.title}</p>
                             <button
                                 onClick={() => handleDelete(blog.id)}
@@ -80,7 +77,7 @@ const AdminDeleteBlogPage = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default AdminDeleteBlogPage;
+export default AdminDeleteBlogPage

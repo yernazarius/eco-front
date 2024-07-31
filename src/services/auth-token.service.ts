@@ -1,5 +1,5 @@
+
 import Cookies from 'js-cookie'
-import config from '@/config/config';
 
 
 export enum EnumTokens {
@@ -28,14 +28,14 @@ export const getAccessToken = () => {
 export const saveTokenStorage = (accessToken: string) => {
     if (config.MODE === 'development') {
         Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-            domain: config.BASE_URL,
+            domain: process.env.NEXT_PUBLIC_BASE_URL,
             sameSite: 'strict',
             expires: 1,
         })
     }
     else if (config.MODE === 'production') {
         Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-            domain: config.BASE_URL,
+            domain: process.env.NEXT_PUBLIC_BASE_URL,
             sameSite: 'strict',
             expires: 1,
             path: '/'
@@ -49,7 +49,7 @@ export const removeFromStorage = () => {
     }
     else if (config.MODE === 'production') {
         Cookies.remove(EnumTokens.ACCESS_TOKEN, {
-            domain: config.BASE_URL,
+            domain: process.env.NEXT_PUBLIC_BASE_URL,
             path: '/'
         })
     }

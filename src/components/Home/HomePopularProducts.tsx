@@ -1,59 +1,59 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { AxiosDefault } from '@/api/interceptors';
-import Link from 'next/link';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault } from '@/api/interceptors'
+
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    discount_percentage: number;
-    rating: number;
-    stock: number;
-    brand: string;
-    thumbnail: string;
-    images: string[];
-    is_published: boolean;
-    created_at: string;
-    category_id: number;
+    id: number
+    title: string
+    description: string
+    price: number
+    discount_percentage: number
+    rating: number
+    stock: number
+    brand: string
+    thumbnail: string
+    images: string[]
+    is_published: boolean
+    created_at: string
+    category_id: number
     category: {
-        id: number;
-        name: string;
-    };
+        id: number
+        name: string
+    }
 }
 
 export default function HomePageProducts() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [products, setProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                console.log('Environment:', process.env.BASE_URL);
-                console.log('Mode:', config.MODE);
-                console.log('Base URL:', config.BASE_URL);
+                console.log('Environment:', process.env.BASE_URL)
+                console.log('Mode:', config.MODE)
+                console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL)
 
-                const response = await AxiosDefault.get('/products/?page=1&limit=10');
-                console.log('Products:', response.data);
-                setProducts(response.data.data);
+                const response = await AxiosDefault.get('/products/?page=1&limit=10')
+                console.log('Products:', response.data)
+                setProducts(response.data.data)
             } catch (error) {
-                console.error('Ошибка при загрузке продуктов:', error);
+                console.error('Ошибка при загрузке продуктов:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
-        fetchProducts();
-    }, []);
+        fetchProducts()
+    }, [])
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -64,7 +64,7 @@ export default function HomePageProducts() {
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
                         <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
                             <img
-                                src={`${config.BASE_URL}/${product.thumbnail}`}
+                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />
@@ -80,5 +80,5 @@ export default function HomePageProducts() {
                 </Link>
             </div>
         </div>
-    );
+    )
 }

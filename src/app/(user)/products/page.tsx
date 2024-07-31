@@ -1,95 +1,94 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { ShoppingCart } from 'lucide-react';
-import { AxiosDefault } from '@/api/interceptors';
-import Link from 'next/link';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault } from '@/api/interceptors'
+import { ShoppingCart } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    discount_percentage: number;
-    rating: number;
-    stock: number;
-    brand: string;
-    thumbnail: string;
-    images: string[];
-    is_published: boolean;
-    created_at: string;
-    category_id: number;
+    id: number
+    title: string
+    description: string
+    price: number
+    discount_percentage: number
+    rating: number
+    stock: number
+    brand: string
+    thumbnail: string
+    images: string[]
+    is_published: boolean
+    created_at: string
+    category_id: number
     category: {
-        id: number;
-        name: string;
-    };
+        id: number
+        name: string
+    }
 }
 
 interface Category {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 export default function ProductsPage() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<Product[]>([]);
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+    const [searchQuery, setSearchQuery] = useState<string>('')
+    const [searchResults, setSearchResults] = useState<Product[]>([])
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await AxiosDefault.get('/products');
-                console.log('Products:', response.data);
-                setProducts(response.data.data);
-                setSearchResults(response.data.data);
+                const response = await AxiosDefault.get('/products')
+                console.log('Products:', response.data)
+                setProducts(response.data.data)
+                setSearchResults(response.data.data)
             } catch (error) {
-                console.error('Ошибка при загрузке продуктов:', error);
+                console.error('Ошибка при загрузке продуктов:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
         const fetchCategories = async () => {
             try {
-                const response = await AxiosDefault.get('/categories/?page=1&limit=10');
-                console.log('Categories:', response.data);
-                setCategories(response.data.data);
+                const response = await AxiosDefault.get('/categories/?page=1&limit=10')
+                console.log('Categories:', response.data)
+                setCategories(response.data.data)
             } catch (error) {
-                console.error('Ошибка при загрузке категорий:', error);
+                console.error('Ошибка при загрузке категорий:', error)
             }
-        };
+        }
 
-        fetchProducts();
-        fetchCategories();
-    }, []);
+        fetchProducts()
+        fetchCategories()
+    }, [])
 
     const handleCategoryClick = (categoryId: number) => {
-        setSelectedCategory(categoryId);
-    };
+        setSelectedCategory(categoryId)
+    }
 
     const handleSearch = async (event: React.FormEvent) => {
-        event.preventDefault();
+        event.preventDefault()
         try {
-            const response = await AxiosDefault.get(`/products/?search=${searchQuery}`);
-            setSearchResults(response.data.data);
+            const response = await AxiosDefault.get(`/products/?search=${searchQuery}`)
+            setSearchResults(response.data.data)
         } catch (error) {
-            console.error('Ошибка при поиске продуктов:', error);
+            console.error('Ошибка при поиске продуктов:', error)
         }
-    };
+    }
 
     const filteredProducts = selectedCategory
         ? searchResults.filter(product => product.category_id === selectedCategory)
-        : searchResults;
+        : searchResults
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -138,7 +137,7 @@ export default function ProductsPage() {
                                 <Link key={product.id} href={`/products/${product.id}`} passHref>
                                     <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer">
                                         <img
-                                            src={`${config.BASE_URL}/${product.thumbnail}`}
+                                            src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
                                             alt={product.title}
                                             className="w-full h-48 object-cover rounded mb-4"
                                         />
@@ -157,5 +156,5 @@ export default function ProductsPage() {
                 </div>
             </div>
         </>
-    );
+    )
 }

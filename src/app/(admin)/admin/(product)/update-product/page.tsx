@@ -1,38 +1,35 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
-import Header from '@/components/Header';
-import Link from 'next/link';
-import Modal from '@/components/Admin/Modal';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import Modal from '@/components/Admin/Modal'
+import { useEffect, useState } from 'react'
 
 interface Category {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    discount_percentage: number;
-    rating: number;
-    stock: number;
-    brand: string;
-    thumbnail: string;
-    images: string[];
-    category_id: number;
-    is_published: boolean;
+    id: number
+    title: string
+    description: string
+    price: number
+    discount_percentage: number
+    rating: number
+    stock: number
+    brand: string
+    thumbnail: string
+    images: string[]
+    category_id: number
+    is_published: boolean
 }
 
 const AdminUpdateProductsPage = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | null>(null)
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -45,52 +42,52 @@ const AdminUpdateProductsPage = () => {
         thumbnail: '',
         images: [''],
         is_published: true,
-    });
-    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    })
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+    const [imageFiles, setImageFiles] = useState<File[]>([])
 
     useEffect(() => {
         const fetchProductsAndCategories = async () => {
             try {
-                const productResponse = await AxiosDefault.get('/products');
-                const categoryResponse = await AxiosDefault.get('/categories');
-                setProducts(productResponse.data.data);
-                setCategories(categoryResponse.data.data);
+                const productResponse = await AxiosDefault.get('/products')
+                const categoryResponse = await AxiosDefault.get('/categories')
+                setProducts(productResponse.data.data)
+                setCategories(categoryResponse.data.data)
             } catch (error) {
-                setError('Ошибка при загрузке продуктов или категорий');
-                console.error('Ошибка при загрузке продуктов или категорий:', error);
+                setError('Ошибка при загрузке продуктов или категорий')
+                console.error('Ошибка при загрузке продуктов или категорий:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
-        fetchProductsAndCategories();
-    }, []);
+        fetchProductsAndCategories()
+    }, [])
 
     const handleUpdate = async (productId: number) => {
         try {
-            const jsonPayload = { ...formData, category_id: parseInt(formData.category_id.toString(), 10) };
+            const jsonPayload = { ...formData, category_id: parseInt(formData.category_id.toString(), 10) }
 
             if (thumbnailFile) {
-                jsonPayload.thumbnail = await uploadFile(thumbnailFile);
+                jsonPayload.thumbnail = await uploadFile(thumbnailFile)
             }
 
             if (imageFiles.length > 0) {
-                jsonPayload.images = await Promise.all(imageFiles.map(file => uploadFile(file)));
+                jsonPayload.images = await Promise.all(imageFiles.map(file => uploadFile(file)))
             }
-            console.log('jsonPayload:', jsonPayload);
+            console.log('jsonPayload:', jsonPayload)
             const response = await axiosWithAuth.put(`/products/${productId}`, jsonPayload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            })
 
             if (response.data) {
                 setProducts(products.map(product =>
                     product.id === productId ? { ...product, ...formData } : product
-                ));
-                setIsModalOpen(false);
-                setCurrentProduct(null);
+                ))
+                setIsModalOpen(false)
+                setCurrentProduct(null)
                 setFormData({
                     title: '',
                     description: '',
@@ -103,29 +100,29 @@ const AdminUpdateProductsPage = () => {
                     thumbnail: '',
                     images: [''],
                     is_published: true,
-                });
-                setThumbnailFile(null);
-                setImageFiles([]);
+                })
+                setThumbnailFile(null)
+                setImageFiles([])
             }
         } catch (error) {
-            setError('Ошибка при обновлении продукта');
-            console.error('Ошибка при обновлении продукта:', error);
+            setError('Ошибка при обновлении продукта')
+            console.error('Ошибка при обновлении продукта:', error)
         }
-    };
+    }
 
     const uploadFile = async (file: File): Promise<string> => {
-        const formData = new FormData();
-        formData.append('file', file);
+        const formData = new FormData()
+        formData.append('file', file)
         const response = await axiosWithAuth.post('/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-        });
-        return response.data.path;
-    };
+        })
+        return response.data.path
+    }
 
     const openModal = (product: Product) => {
-        setCurrentProduct(product);
+        setCurrentProduct(product)
         setFormData({
             title: product.title,
             description: product.description,
@@ -138,13 +135,13 @@ const AdminUpdateProductsPage = () => {
             thumbnail: product.thumbnail,
             images: product.images,
             is_published: product.is_published,
-        });
-        setIsModalOpen(true);
-    };
+        })
+        setIsModalOpen(true)
+    }
 
     const closeModal = () => {
-        setIsModalOpen(false);
-        setCurrentProduct(null);
+        setIsModalOpen(false)
+        setCurrentProduct(null)
         setFormData({
             title: '',
             description: '',
@@ -157,34 +154,34 @@ const AdminUpdateProductsPage = () => {
             thumbnail: '',
             images: [''],
             is_published: true,
-        });
-        setThumbnailFile(null);
-        setImageFiles([]);
-    };
+        })
+        setThumbnailFile(null)
+        setImageFiles([])
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setFormData({
             ...formData,
             [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
-        });
-    };
+        })
+    }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, files } = e.target;
+        const { name, files } = e.target
         if (name === 'thumbnail' && files && files[0]) {
-            setThumbnailFile(files[0]);
+            setThumbnailFile(files[0])
         } else if (name === 'images' && files) {
-            setImageFiles(Array.from(files));
+            setImageFiles(Array.from(files))
         }
-    };
+    }
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     if (error) {
@@ -192,7 +189,7 @@ const AdminUpdateProductsPage = () => {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-red-500">{error}</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -203,7 +200,7 @@ const AdminUpdateProductsPage = () => {
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
                             <img
-                                src={`${config.BASE_URL}/${product.thumbnail}`}
+                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />
@@ -226,7 +223,7 @@ const AdminUpdateProductsPage = () => {
                 <Modal onClose={closeModal}>
                     <div className="p-6 max-h-[80vh] overflow-y-auto">
                         <h2 className="text-xl font-bold mb-4">Обновить продукт</h2>
-                        <form onSubmit={(e) => { e.preventDefault(); handleUpdate(currentProduct!.id); }}>
+                        <form onSubmit={(e) => { e.preventDefault(); handleUpdate(currentProduct!.id) }}>
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2">Название</label>
                                 <input
@@ -349,7 +346,7 @@ const AdminUpdateProductsPage = () => {
                 </Modal>
             )}
         </>
-    );
-};
+    )
+}
 
-export default AdminUpdateProductsPage;
+export default AdminUpdateProductsPage

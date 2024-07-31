@@ -1,15 +1,14 @@
-"use client";
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ShoppingCart } from 'lucide-react';
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import { ShoppingCart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react';
+;
 
 
 interface Category {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 const CreateProduct = () => {
@@ -25,79 +24,79 @@ const CreateProduct = () => {
         images: [''],
         category_id: 1,
         is_published: true,
-    });
+    })
 
-    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-    const [imageFiles, setImageFiles] = useState<File[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+    const [imageFiles, setImageFiles] = useState<File[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
 
     const fetchCategories = async () => {
         try {
-            const response = await AxiosDefault.get('/categories');
-            setCategories(response.data.data);
+            const response = await AxiosDefault.get('/categories')
+            setCategories(response.data.data)
         } catch (error) {
-            console.error('Error fetching categories', error);
+            console.error('Error fetching categories', error)
         }
-    };
+    }
 
     useEffect(() => {
-        fetchCategories();
-    }, []);
+        fetchCategories()
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setFormData({
             ...formData,
             [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
-        });
-    };
+        })
+    }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, files } = e.target;
+        const { name, files } = e.target
         if (name === 'thumbnail' && files && files[0]) {
-            setThumbnailFile(files[0]);
+            setThumbnailFile(files[0])
         } else if (name === 'images' && files) {
-            setImageFiles(Array.from(files));
+            setImageFiles(Array.from(files))
         }
-    };
+    }
 
-    const router = useRouter();
+    const router = useRouter()
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
-            const data = new FormData();
+            const data = new FormData()
             Object.keys(formData).forEach(key => {
                 if (key !== 'images') {
-                    data.append(key, (formData as any)[key]);
+                    data.append(key, (formData as any)[key])
                 }
-            });
+            })
 
             if (thumbnailFile) {
-                data.append('thumbnail', thumbnailFile);
+                data.append('thumbnail', thumbnailFile)
             }
 
             imageFiles.forEach((file, index) => {
-                data.append('images', file);
-            });
+                data.append('images', file)
+            })
 
             // Debugging: Output FormData values
             data.forEach((value, key) => {
-                console.log(`${key}:`, value);
-            });
+                console.log(`${key}:`, value)
+            })
 
             const response = await axiosWithAuth.post('/products', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-            });
+            })
 
             if (response.data) {
-                router.replace('/admin');
+                router.replace('/admin')
             }
         } catch (error) {
-            console.error('Error uploading images', error);
+            console.error('Error uploading images', error)
         }
-    };
+    }
 
 
 
@@ -231,7 +230,7 @@ const CreateProduct = () => {
                 </form>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default CreateProduct;
+export default CreateProduct

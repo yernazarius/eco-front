@@ -1,50 +1,46 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import { AxiosDefault } from '@/api/interceptors';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault } from '@/api/interceptors'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 interface Blog {
-    id: number;
-    title: string;
-    text: string;
-    image: string;
-    createdAt: string;
+    id: number
+    title: string
+    text: string
+    image: string
+    createdAt: string
 }
 
 const BlogPage = () => {
-    const [blog, setBlog] = useState<Blog | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const { id } = useParams();
-    console.log('id:', id);
+    const [blog, setBlog] = useState<Blog | null>(null)
+    const [loading, setLoading] = useState<boolean>(true)
+    const { id } = useParams()
+    console.log('id:', id)
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) return
 
         const fetchBlog = async () => {
             try {
-                const response = await AxiosDefault.get(`/blogs/${id}`);
-                console.log('response:', response.data);
-                setBlog(response.data.data);
+                const response = await AxiosDefault.get(`/blogs/${id}`)
+                console.log('response:', response.data)
+                setBlog(response.data.data)
             } catch (error) {
-                console.error('Ошибка при загрузке блога:', error);
+                console.error('Ошибка при загрузке блога:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
-        fetchBlog();
-    }, [id]);
+        fetchBlog()
+    }, [id])
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     if (!blog) {
@@ -52,7 +48,7 @@ const BlogPage = () => {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Блог не найден</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -74,7 +70,7 @@ const BlogPage = () => {
                             <i className="far fa-clock"></i> Время чтения: 2 минуты
                         </div>
                     </div>
-                    <img src={`${config.BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                     <p className="text-gray-700 mb-6">{blog.text}</p>
                 </div>
                 <div className="mt-10">
@@ -97,7 +93,7 @@ const BlogPage = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default BlogPage;
+export default BlogPage

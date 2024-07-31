@@ -1,60 +1,57 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors';
-import Header from '@/components/Header';
-import Link from 'next/link';
-import config from '@/config/config';
+"use client"
+import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import { useEffect, useState } from 'react'
 
 
 interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    stock: number;
-    brand: string;
-    thumbnail: string;
-    is_published: boolean;
+    id: number
+    title: string
+    description: string
+    price: number
+    stock: number
+    brand: string
+    thumbnail: string
+    is_published: boolean
 }
 
 const AdminDeleteProductsPage = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [products, setProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await AxiosDefault.get('/products');
-                console.log('response:', response.data.data);
-                setProducts(response.data.data);
+                const response = await AxiosDefault.get('/products')
+                console.log('response:', response.data.data)
+                setProducts(response.data.data)
             } catch (error) {
-                setError('Ошибка при загрузке продуктов');
-                console.error('Ошибка при загрузке продуктов:', error);
+                setError('Ошибка при загрузке продуктов')
+                console.error('Ошибка при загрузке продуктов:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
+        }
 
-        fetchProducts();
-    }, []);
+        fetchProducts()
+    }, [])
 
     const handleDelete = async (productId: number) => {
         try {
-            await axiosWithAuth.delete(`/products/${productId}`);
-            setProducts(products.filter(product => product.id !== productId));
+            await axiosWithAuth.delete(`/products/${productId}`)
+            setProducts(products.filter(product => product.id !== productId))
         } catch (error) {
-            setError('Ошибка при удалении продукта');
-            console.error('Ошибка при удалении продукта:', error);
+            setError('Ошибка при удалении продукта')
+            console.error('Ошибка при удалении продукта:', error)
         }
-    };
+    }
 
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-gray-500">Загрузка...</div>
             </div>
-        );
+        )
     }
 
     if (error) {
@@ -62,7 +59,7 @@ const AdminDeleteProductsPage = () => {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-xl text-red-500">{error}</div>
             </div>
-        );
+        )
     }
 
     return (
@@ -73,7 +70,7 @@ const AdminDeleteProductsPage = () => {
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
                             <img
-                                src={`${config.BASE_URL}/${product.thumbnail}`}
+                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />
@@ -92,7 +89,7 @@ const AdminDeleteProductsPage = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default AdminDeleteProductsPage;
+export default AdminDeleteProductsPage

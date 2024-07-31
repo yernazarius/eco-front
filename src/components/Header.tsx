@@ -1,9 +1,8 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { AxiosDefault } from '@/api/interceptors'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AxiosDefault } from '@/api/interceptors'
-import config from '@/config/config'
+import { useEffect, useState } from 'react'
 
 interface HeaderTab {
     id: number
@@ -126,7 +125,7 @@ const Header = () => {
                                                     {result.title}
                                                 </div>
                                                 <img
-                                                    src={`${config.BASE_URL}/${result.thumbnail}`}
+                                                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/${result.thumbnail}`}
                                                     alt={result.title}
                                                     className="w-[20%] h-auto"
                                                 />
