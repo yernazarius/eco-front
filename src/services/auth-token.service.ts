@@ -35,7 +35,7 @@ export const saveTokenStorage = (accessToken: string) => {
     // }
     // else if (config.MODE === 'production') {
     Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-        domain: process.env.NEXT_PUBLIC_BASE_URL,
+        domain: process.env.NEXT_PUBLIC_COOKIE_URL,
         sameSite: 'strict',
         expires: 1,
         path: '/'
