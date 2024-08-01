@@ -146,7 +146,7 @@ const Header = () => {
                 </div>
             </div>
 
-            <nav className="flex justify-around items-center py-2 border-y">
+            <nav className="flex justify-around items-center py-2 border-y relative">
                 <div className="relative group">
                     <a
                         href="#"
