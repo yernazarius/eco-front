@@ -8,14 +8,11 @@ interface HeaderTab {
     id: number
     name: string
 }
+
 interface SubHeaderTab {
     id: number
     name: string
     header_tab_id: number
-    header_tab: {
-        id: number
-        name: string
-    }
 }
 
 const Header = () => {
@@ -25,7 +22,6 @@ const Header = () => {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
     const [subHeaderTabs, setSubHeaderTabs] = useState<SubHeaderTab[]>([])
     const [headerTabs, setHeaderTabs] = useState<HeaderTab[]>([])
-
 
     useEffect(() => {
         const fetchHeaderTabs = async () => {
@@ -117,7 +113,6 @@ const Header = () => {
                                     searchResults.map((result: any) => (
                                         <Link href={`/products/${result.id}`} key={result.id} passHref>
                                             <div className='flex flex-row justify-between p-1'>
-
                                                 <div
                                                     className="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
                                                     onClick={handleResultClick}
@@ -155,7 +150,7 @@ const Header = () => {
                         Компания
                     </a>
                     <div
-                        className="absolute z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        className="absolute hidden group-hover:block z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg"
                     >
                         <Link href="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
                         <Link href="/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link>
@@ -175,7 +170,7 @@ const Header = () => {
                         Промышленный анализ
                     </a>
                     <div
-                        className="absolute z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        className="absolute hidden group-hover:block z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg"
                     >
                         <Link href="/industrial/analysis1" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 1</Link>
                         <Link href="/industrial/analysis2" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 2</Link>
@@ -189,28 +184,26 @@ const Header = () => {
                 <Link href="/news" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Новости</Link>
                 <Link href="/contacts" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Контакты</Link>
                 {headerTabs.map(headerTab => (
-                    <div key={headerTab.id} className="">
+                    <div key={headerTab.id} className=" group">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
-                            className={`mb-2 ${selectedCategory === headerTab.id ? 'font-bold' : ''}`}
+                            className={` ${selectedCategory === headerTab.id ? 'font-bold' : ''}`}
                         >
                             <span className="text-gray-800 hover:text-gray-600">
                                 {headerTab.name}
                             </span>
                         </button>
-                        {selectedCategory === headerTab.id && (
-                            <div className="absolute z-40 left-0 mt-2 w-full bg-white shadow-lg ">
-                                {subHeaderTabs.filter(subHeaderTab => subHeaderTab.header_tab_id === headerTab.id).map(subHeaderTab => (
-                                    <Link
-                                        key={subHeaderTab.id}
-                                        href="#"
-                                        className="block px-4 py-2 text-gray-800 w-1/4 hover:bg-gray-200"
-                                    >
-                                        {subHeaderTab.name}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
+                        <div className={`absolute ${selectedCategory === headerTab.id ? 'block' : 'hidden'} hover:block z-40 left-0 mt-2 w-full px-2 bg-white shadow-lg`}>
+                            {subHeaderTabs.filter(subHeaderTab => subHeaderTab.header_tab_id === headerTab.id).map(subHeaderTab => (
+                                <Link
+                                    key={subHeaderTab.id}
+                                    href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}`}
+                                    className="block px-4 py-2 text-gray-800 w-1/4 hover:bg-gray-200"
+                                >
+                                    {subHeaderTab.name}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </nav>

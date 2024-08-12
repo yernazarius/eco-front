@@ -34,7 +34,10 @@ export default function AdminPage() {
         {
             category: "header elements", items: [
                 { title: "Добавить элемент в шапку", desc: "Управляйте добавлением элементов в шапку", link: "create-header-tab" },
-                { title: "Добавить подэлемент в шапку", desc: "Управляйте добавлением подэлементов в шапку", link: "create-sub-header-tab" }
+                { title: "Добавить подэлемент в шапку", desc: "Управляйте добавлением подэлементов в шапку", link: "create-sub-header-tab" },
+                { title: "Добавить продукты в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-product" },
+                { title: "Добавить Статью в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-articles" }
+
             ]
         }
 

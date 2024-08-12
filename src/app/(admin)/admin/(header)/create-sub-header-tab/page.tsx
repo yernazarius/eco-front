@@ -11,7 +11,6 @@ interface HeaderTab {
 
 const CreateSubHeaderTab = () => {
 	const [headerTabs, setHeaderTabs] = useState<HeaderTab[]>([])
-
 	const [formData, setFormData] = useState({
 		name: '',
 		header_tab_id: 0,
@@ -32,6 +31,13 @@ const CreateSubHeaderTab = () => {
 			const response = await AxiosDefault.get('/header_tabs')
 			console.log('response', response.data.data)
 			setHeaderTabs(response.data.data)
+			if (response.data.data.length > 0) {
+				// Set initial header_tab_id to the first HeaderTab's id
+				setFormData(prevFormData => ({
+					...prevFormData,
+					header_tab_id: response.data.data[0].id
+				}))
+			}
 		} catch (error) {
 			console.error('Error fetching Header tabs', error)
 		}
