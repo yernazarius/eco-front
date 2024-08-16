@@ -2,9 +2,7 @@
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
 import { ShoppingCart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react';
-;
-
+import { useEffect, useState } from 'react'
 
 interface Category {
     id: number
@@ -24,6 +22,8 @@ const CreateProduct = () => {
         images: [''],
         category_id: 1,
         is_published: true,
+        favourite: false,
+        recomended: false,
     })
 
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
@@ -44,12 +44,22 @@ const CreateProduct = () => {
     }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-        setFormData({
-            ...formData,
-            [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
-        })
+        const { name, value, type } = e.target
+
+        if (type === 'select-one') {
+            setFormData({
+                ...formData,
+                [name]: value === 'true', // Convert string "true"/"false" to boolean
+            })
+        } else {
+            setFormData({
+                ...formData,
+                [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
+            })
+        }
     }
+
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target
@@ -65,9 +75,10 @@ const CreateProduct = () => {
         e.preventDefault()
         try {
             const data = new FormData()
+
             Object.keys(formData).forEach(key => {
-                if (key !== 'images') {
-                    data.append(key, (formData as any)[key])
+                if (key !== 'images' && key !== 'thumbnail') {
+                    data.append(key, (formData as any)[key]) // Append boolean values directly
                 }
             })
 
@@ -79,12 +90,8 @@ const CreateProduct = () => {
                 data.append('images', file)
             })
 
-            // Debugging: Output FormData values
-            data.forEach((value, key) => {
-                console.log(`${key}:`, value)
-            })
-
-            const response = await axiosWithAuth.post('/products', data, {
+            console.log('Data:', ...data)
+            const response = await axiosWithAuth.post('/products/', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -101,7 +108,7 @@ const CreateProduct = () => {
 
 
     return (
-        <div className="min-h-screen  flex items-center justify-center py-24">
+        <div className="min-h-screen flex items-center justify-center py-24">
             <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-2xl font-bold mb-5 text-center text-gray-800 flex items-center justify-center">
                     <ShoppingCart className="w-6 h-6 mr-2" />
@@ -198,6 +205,32 @@ const CreateProduct = () => {
                                     {category.name}
                                 </option>
                             ))}
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Избранный продукт</label>
+                        <select
+                            name="favourite"
+                            value={formData.favourite ? 'true' : 'false'}
+                            onChange={handleChange}
+                            className="w-full p-2 border border-gray-300 rounded"
+                            required
+                        >
+                            <option value="true">Да</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Рекомендуемый продукт</label>
+                        <select
+                            name="recomended"
+                            value={formData.recomended ? 'true' : 'false'}
+                            onChange={handleChange}
+                            className="w-full p-2 border border-gray-300 rounded"
+                            required
+                        >
+                            <option value="true">Да</option>
+                            <option value="false">Нет</option>
                         </select>
                     </div>
                     <div className="mb-4">

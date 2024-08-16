@@ -1,5 +1,6 @@
 "use client"
 import { AxiosDefault } from '@/api/interceptors'
+import Image from 'next/image'
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -60,7 +61,7 @@ export default function HomePageProducts() {
                 {products.map(product => (
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
                         <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
-                            <img
+                            <Image width={300} height={300}
                                 src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"

@@ -143,7 +143,7 @@ export default function ProductsPage() {
                                         />
                                         <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
                                         <p className="text-gray-700 mb-2">{product.description}</p>
-                                        <p className="text-gray-900 font-semibold mb-2">${product.price}</p>
+                                        <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
                                         <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
                                         <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
                                         <p className="text-gray-600 mb-2">Категория: {product.category.name}</p>
