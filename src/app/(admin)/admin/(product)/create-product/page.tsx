@@ -90,7 +90,6 @@ const CreateProduct = () => {
                 data.append('images', file)
             })
 
-            console.log('Data:', ...data)
             const response = await axiosWithAuth.post('/products/', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
