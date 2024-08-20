@@ -12,7 +12,14 @@ interface HeaderTab {
 interface SubHeaderTab {
     id: number
     name: string
-    header_tab_id: number
+    grand_category_id: number
+    image_path: string
+}
+
+interface ChildCategory {
+    id: number
+    name: string
+    parent_category_id: number
 }
 
 const Header = () => {
@@ -22,20 +29,22 @@ const Header = () => {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
     const [subHeaderTabs, setSubHeaderTabs] = useState<SubHeaderTab[]>([])
     const [headerTabs, setHeaderTabs] = useState<HeaderTab[]>([])
+    const [childCategories, setChildCategories] = useState<ChildCategory[]>([])
 
     useEffect(() => {
         const fetchHeaderTabs = async () => {
             try {
-                const response = await AxiosDefault.get('/header_tabs')
+                const response = await AxiosDefault.get('/category_grand/')
                 console.log('HeaderTabs:', response.data)
                 setHeaderTabs(response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке категорий:', error)
             }
         }
+
         const fetchSubHeaderTabs = async () => {
             try {
-                const response = await AxiosDefault.get('/sub_header_tabs')
+                const response = await AxiosDefault.get('/category_parent/')
                 console.log('SubHeaderTabs:', response.data.data)
                 setSubHeaderTabs(response.data.data)
             } catch (error) {
@@ -43,8 +52,19 @@ const Header = () => {
             }
         }
 
+        const fetchChildCategories = async () => {
+            try {
+                const response = await AxiosDefault.get('/category_child/')
+                console.log('ChildCategories:', response.data.data)
+                setChildCategories(response.data.data)
+            } catch (error) {
+                console.error('Ошибка при загрузке подкатегорий:', error)
+            }
+        }
+
         fetchHeaderTabs()
         fetchSubHeaderTabs()
+        fetchChildCategories()
     }, [])
 
     const handleCategoryClick = (categoryId: number) => {
@@ -187,23 +207,44 @@ const Header = () => {
                     <div key={headerTab.id} className=" group">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
-                            className={` ${selectedCategory === headerTab.id ? 'font-bold' : ''}`}
+                            className={`px-3 py-2 rounded-md ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-blue-600'}`}
                         >
-                            <span className="text-gray-800 hover:text-gray-600">
-                                {headerTab.name}
-                            </span>
+                            {headerTab.name}
                         </button>
-                        <div className={`absolute ${selectedCategory === headerTab.id ? 'block' : 'hidden'} hover:block z-40 left-0 mt-2 w-full px-2 bg-white shadow-lg`}>
-                            {subHeaderTabs.filter(subHeaderTab => subHeaderTab.header_tab_id === headerTab.id).map(subHeaderTab => (
-                                <Link
-                                    key={subHeaderTab.id}
-                                    href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}`}
-                                    className="block px-4 py-2 text-gray-800 w-1/4 hover:bg-gray-200"
-                                >
-                                    {subHeaderTab.name}
-                                </Link>
-                            ))}
-                        </div>
+                        {selectedCategory === headerTab.id && (
+                            <div className="absolute left-0 w-full bg-white shadow-lg z-20 mt-2">
+                                <div className="grid grid-cols-4 gap-4 p-4">
+                                    {subHeaderTabs.filter(subHeaderTab => subHeaderTab.grand_category_id === headerTab.id).map(subHeaderTab => (
+                                        <div className='' key={subHeaderTab.id}>
+                                            <Image
+                                                priority
+                                                width={1000}
+                                                height={1000}
+                                                alt={subHeaderTab.name}
+                                                src={`${process.env.NEXT_PUBLIC_S3_URL}${subHeaderTab.image_path}`}
+                                                className="w-1/3 h-auto mx-auto object-cover rounded"
+                                            />
+                                            <Link
+                                                href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}`}
+                                                className="block px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+                                            >
+                                                {subHeaderTab.name}
+                                            </Link>
+                                            {/* Render child categories if they exist */}
+                                            {childCategories.filter(child => child.parent_category_id === subHeaderTab.id).map(child => (
+                                                <Link
+                                                    key={child.id}
+                                                    href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}/${child.name}`}
+                                                    className="block px-4 py-1 ml-4 text-gray-600 hover:bg-gray-100"
+                                                >
+                                                    {child.name}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ))}
             </nav>

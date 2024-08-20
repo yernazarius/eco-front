@@ -17,8 +17,8 @@ interface Product {
     images: string[]
     is_published: boolean
     created_at: string
-    category_id: number
-    category: {
+    child_category_id: number
+    child_category: {
         id: number
         name: string
     }
@@ -53,7 +53,7 @@ export default function ProductsPage() {
 
         const fetchCategories = async () => {
             try {
-                const response = await AxiosDefault.get('/categories/?page=1&limit=10')
+                const response = await AxiosDefault.get('/category_child/')
                 console.log('Categories:', response.data)
                 setCategories(response.data.data)
             } catch (error) {
@@ -80,7 +80,7 @@ export default function ProductsPage() {
     }
 
     const filteredProducts = selectedCategory
-        ? searchResults.filter(product => product.category_id === selectedCategory)
+        ? searchResults.filter(product => product.child_category_id === selectedCategory)
         : searchResults
 
     if (loading) {
@@ -137,7 +137,7 @@ export default function ProductsPage() {
                                 <Link key={product.id} href={`/products/${product.id}`} passHref>
                                     <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer">
                                         <img
-                                            src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
+                                            src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                             alt={product.title}
                                             className="w-full h-48 object-cover rounded mb-4"
                                         />
@@ -146,7 +146,7 @@ export default function ProductsPage() {
                                         <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
                                         <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
                                         <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
-                                        <p className="text-gray-600 mb-2">Категория: {product.category.name}</p>
+                                        <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
                                         <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p>
                                     </div>
                                 </Link>

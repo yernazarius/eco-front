@@ -13,6 +13,18 @@ const options: CreateAxiosDefaults = {
     withCredentials: true
 }
 
+
+const s3Options: CreateAxiosDefaults = {
+    baseURL: process.env.NEXT_PUBLIC_S3_AXIOS,
+    withCredentials: true,
+    headers: {
+        'API_KEY': 'test_key',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`
+    }
+}
+
+const AxiosS3 = axios.create(s3Options)
+
 const axiosLogin = axios.create({
     ...options,
     headers: {
@@ -70,5 +82,5 @@ axiosWithAuth.interceptors.response.use(
     }
 )
 
-export { AxiosDefault, axiosLogin, axiosWithAuth }
+export { AxiosDefault, axiosLogin, AxiosS3, axiosWithAuth }
 

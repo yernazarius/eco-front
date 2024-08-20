@@ -62,7 +62,7 @@ export default function HomePageProducts() {
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
                         <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
                             <Image width={300} height={300}
-                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
+                                src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />

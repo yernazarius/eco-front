@@ -1,12 +1,14 @@
 "use client"
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import { AxiosDefault, axiosWithAuth, AxiosS3 } from '@/api/interceptors'
 import { ShoppingCart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Category {
     id: number
     name: string
+    parent_category_id: string
 }
 
 const CreateProduct = () => {
@@ -20,8 +22,7 @@ const CreateProduct = () => {
         brand: '',
         thumbnail: '',
         images: [''],
-        category_id: 1,
-        is_published: true,
+        child_category_id: 0,
         favourite: false,
         recomended: false,
     })
@@ -29,10 +30,12 @@ const CreateProduct = () => {
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
     const [imageFiles, setImageFiles] = useState<File[]>([])
     const [categories, setCategories] = useState<Category[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const fetchCategories = async () => {
         try {
-            const response = await AxiosDefault.get('/categories')
+            const response = await AxiosDefault.get('/category_child/')
             setCategories(response.data.data)
         } catch (error) {
             console.error('Error fetching categories', error)
@@ -46,20 +49,15 @@ const CreateProduct = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target
 
-        if (type === 'select-one') {
-            setFormData({
-                ...formData,
-                [name]: value === 'true', // Convert string "true"/"false" to boolean
-            })
-        } else {
-            setFormData({
-                ...formData,
-                [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
-            })
-        }
+        setFormData({
+            ...formData,
+            [name]: type === 'number' || name === 'child_category_id'
+                ? parseInt(value)
+                : (type === 'select-one' && (name === 'favourite' || name === 'recomended'))
+                    ? value === 'true'
+                    : value
+        })
     }
-
-
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target
@@ -70,42 +68,68 @@ const CreateProduct = () => {
         }
     }
 
-    const router = useRouter()
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const uploadFileToS3 = async (file: File, dir: string) => {
+        const uuidv4Name = uuidv4()
+        const fileExtension = file.name.split('.').pop()
+        const newFileName = `${dir}/${uuidv4Name}.${fileExtension}`
+        const renamedFile = new File([file], newFileName, { type: file.type })
+
+        const formDataForUpload = new FormData()
+        formDataForUpload.append('file', renamedFile)
+
         try {
-            const data = new FormData()
-
-            Object.keys(formData).forEach(key => {
-                if (key !== 'images' && key !== 'thumbnail') {
-                    data.append(key, (formData as any)[key]) // Append boolean values directly
-                }
-            })
-
-            if (thumbnailFile) {
-                data.append('thumbnail', thumbnailFile)
+            const s3Response = await AxiosS3.post(`upload?dir=${dir}&name_of_file=${uuidv4Name}.${fileExtension}`, formDataForUpload)
+            if (s3Response.status !== 200) {
+                throw new Error('Failed to upload file to S3')
             }
-
-            imageFiles.forEach((file, index) => {
-                data.append('images', file)
-            })
-
-            const response = await axiosWithAuth.post('/products/', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-
-            if (response.data) {
-                router.replace('/admin')
-            }
+            return s3Response.data.file_path || newFileName
         } catch (error) {
-            console.error('Error uploading images', error)
+            throw new Error('Error uploading file to S3')
         }
     }
 
+    const router = useRouter()
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsLoading(true)
+        setError(null)
 
+        try {
+            // Upload the thumbnail and images to S3
+            let thumbnailPath = ''
+            const imagePaths: string[] = []
+
+            if (thumbnailFile) {
+                thumbnailPath = await uploadFileToS3(thumbnailFile, 'front')
+            }
+
+            if (imageFiles.length > 0) {
+                for (const file of imageFiles) {
+                    const imagePath = await uploadFileToS3(file, 'front')
+                    imagePaths.push(imagePath)
+                }
+            }
+
+            // Prepare form data with S3 paths
+            const data = {
+                ...formData,
+                thumbnail: thumbnailPath,
+                images: imagePaths,
+            }
+
+            console.log('data', data)
+            const response = await axiosWithAuth.post('/products/', data)
+            if (response.data) {
+                router.replace('/admin')
+            }
+        } catch (err) {
+            setError('Error creating product')
+            console.error('Error:', err)
+        } finally {
+            setIsLoading(false)
+        }
+    }
     return (
         <div className="min-h-screen flex items-center justify-center py-24">
             <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
@@ -193,12 +217,15 @@ const CreateProduct = () => {
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Категория</label>
                         <select
-                            name="category_id"
-                            value={formData.category_id}
+                            name="child_category_id"
+                            value={formData.child_category_id}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                         >
+                            <option value={0} disabled>
+                                Выберите категорию
+                            </option>
                             {categories.map(category => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -253,11 +280,13 @@ const CreateProduct = () => {
                             required
                         />
                     </div>
+                    {error && <p className="text-red-500 mb-4">{error}</p>}
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
+                        disabled={isLoading}
                     >
-                        Создать
+                        {isLoading ? 'Загрузка...' : 'Создать'}
                     </button>
                 </form>
             </div>

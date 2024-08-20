@@ -4,9 +4,15 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'http',
-				hostname: 'localhost',
-				port: '8000',
-				pathname: '/media/**',
+				hostname: '0.0.0.0',
+				port: '8083',
+				pathname: '/s3/static/**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'daididau.kz',
+				port: '',
+				pathname: '/s3/static/**',
 			},
 		],
 	},

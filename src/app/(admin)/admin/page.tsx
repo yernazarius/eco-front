@@ -11,10 +11,24 @@ export default function AdminPage() {
     const [errorText, setErrorText] = useState('')
     const paths = [
         {
-            category: "catalog", items: [
-                { title: "Создать каталог", desc: "Управляйте созданием каталога", link: "create-category" },
-                { title: "Удалить каталог", desc: "Управляйте удалением каталога", link: "delete-category" },
-                { title: "Обновить каталог", desc: "Управляйте обновлением каталога", link: "update-category" },
+            category: "Grand Category", items: [
+                { title: "create new grand category", desc: "...", link: "create-grand-category" },
+                { title: "delete grand category", desc: "...", link: "get-all-grand-category" },
+
+            ]
+        },
+        {
+            category: "Parent Category", items: [
+                { title: "create new parent category", desc: "...", link: "create-parent-category" },
+                { title: "delete parent category", desc: "...", link: "get-all-parent-category" },
+
+            ]
+        },
+        {
+            category: "Child Category", items: [
+                { title: "create new child category", desc: "...", link: "create-child-category" },
+                { title: "delete child category", desc: "...", link: "get-all-child-category" },
+
             ]
         },
         {
@@ -24,6 +38,14 @@ export default function AdminPage() {
                 { title: "Обновить продукт", desc: "Управляйте обновлением продукта", link: "update-product" },
             ]
         },
+        {
+            category: "catalog", items: [
+                { title: "Создать каталог", desc: "Управляйте созданием каталога", link: "create-category" },
+                { title: "Удалить каталог", desc: "Управляйте удалением каталога", link: "delete-category" },
+                { title: "Обновить каталог", desc: "Управляйте обновлением каталога", link: "update-category" },
+            ]
+        },
+
         {
             category: "blog", items: [
                 { title: "Добавить блог", desc: "Управляйте добавлением блога", link: "create-blog" },
@@ -42,6 +64,7 @@ export default function AdminPage() {
 
             ]
         }
+
 
     ]
 
