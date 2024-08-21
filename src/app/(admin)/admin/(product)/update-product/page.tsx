@@ -74,6 +74,7 @@ const AdminUpdateProductsPage = () => {
             // Compare each form data field with the current product data
             Object.keys(formData).forEach(key => {
                 if (formData[key as keyof Product] !== currentProduct?.[key as keyof Product]) {
+                    // @ts-ignore
                     changes[key as keyof Product] = formData[key as keyof Product]
                 }
             })
@@ -122,11 +123,20 @@ const AdminUpdateProductsPage = () => {
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value, type, checked } = e.target
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-        })
+        const { name, value, type } = e.target
+
+        if (type === 'checkbox') {
+            const { checked } = e.target as HTMLInputElement
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: checked,
+            }))
+        } else {
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: value,
+            }))
+        }
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
