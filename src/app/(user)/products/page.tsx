@@ -3,7 +3,7 @@ import { AxiosDefault } from '@/api/interceptors'
 import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
@@ -40,7 +40,7 @@ interface Category {
     name: string
 }
 
-export default function ProductsPage() {
+function ProductsPageContent() {
     const [products, setProducts] = useState<Product[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState<boolean>(true)
@@ -106,6 +106,7 @@ export default function ProductsPage() {
             console.error('Ошибка при поиске продуктов:', error)
         }
     }
+
     const clearFilters = () => {
         setSearchResults(products)
         router.push('/products')  // This will navigate to /products and clear query parameters
@@ -177,7 +178,6 @@ export default function ProductsPage() {
                                     <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
                                     <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
                                     <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
-                                    {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
                                 </div>
                             </Link>
                         ))}
@@ -185,5 +185,13 @@ export default function ProductsPage() {
                 </main>
             </div>
         </div>
+    )
+}
+
+export default function ProductsPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Загрузка...</div>}>
+            <ProductsPageContent />
+        </Suspense>
     )
 }
