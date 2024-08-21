@@ -1,5 +1,6 @@
 "use client"
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 
@@ -69,8 +70,10 @@ const AdminDeleteProductsPage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
-                            <img
-                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
+                            <Image
+                                width={300}
+                                height={300}
+                                src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />

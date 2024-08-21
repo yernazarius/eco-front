@@ -1,10 +1,9 @@
 "use client"
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { AxiosDefault } from '@/api/interceptors'
 import Header from '@/components/Header'
 import ImageSlider from '@/components/Products/ImageSlider'
-
 
 interface Product {
     id: number
@@ -19,8 +18,8 @@ interface Product {
     images: string[]
     is_published: boolean
     created_at: string
-    category_id: number
-    category: {
+    child_category_id: number
+    child_category: {
         id: number
         name: string
     }
@@ -29,15 +28,18 @@ interface Product {
 const ProductPage = () => {
     const [product, setProduct] = useState<Product | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
-    const { id } = useParams()
-    console.log('ID:', id)
+    const pathname = usePathname()
+
+    // Extract slug and product ID from the URL
+    const pathSegments = pathname.split('/').filter(Boolean)
+    const productId = pathSegments[pathSegments.length - 1]
 
     useEffect(() => {
-        if (!id) return
+        if (!productId) return
 
         const fetchProduct = async () => {
             try {
-                const response = await AxiosDefault.get(`/products/${id}`)
+                const response = await AxiosDefault.get(`/products/${productId}`)
                 console.log('Product:', response.data.data)
                 setProduct(response.data.data)
             } catch (error) {
@@ -48,7 +50,7 @@ const ProductPage = () => {
         }
 
         fetchProduct()
-    }, [id])
+    }, [productId])
 
     if (loading) {
         return (
@@ -79,8 +81,8 @@ const ProductPage = () => {
                         <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
                         <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
                         <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
-                        <p className="text-gray-600 mb-2">Категория: {product.category?.name}</p>
-                        <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p>
+                        <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
+                        {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
                     </div>
                 </div>
             </div>

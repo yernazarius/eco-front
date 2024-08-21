@@ -1,6 +1,7 @@
 "use client"
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
 import Modal from '@/components/Admin/Modal'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 interface Category {
@@ -21,6 +22,8 @@ interface Product {
     images: string[]
     category_id: number
     is_published: boolean
+    favourite: boolean
+    recomended: boolean
 }
 
 const AdminUpdateProductsPage = () => {
@@ -30,19 +33,7 @@ const AdminUpdateProductsPage = () => {
     const [error, setError] = useState<string | null>(null)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        price: 0,
-        discount_percentage: 0,
-        rating: 0,
-        stock: 0,
-        brand: '',
-        category_id: 0,
-        thumbnail: '',
-        images: [''],
-        is_published: true,
-    })
+    const [formData, setFormData] = useState<Partial<Product>>({})
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
     const [imageFiles, setImageFiles] = useState<File[]>([])
 
@@ -50,7 +41,7 @@ const AdminUpdateProductsPage = () => {
         const fetchProductsAndCategories = async () => {
             try {
                 const productResponse = await AxiosDefault.get('/products')
-                const categoryResponse = await AxiosDefault.get('/categories')
+                const categoryResponse = await AxiosDefault.get('/category_child')
                 setProducts(productResponse.data.data)
                 setCategories(categoryResponse.data.data)
             } catch (error) {
@@ -66,17 +57,28 @@ const AdminUpdateProductsPage = () => {
 
     const handleUpdate = async (productId: number) => {
         try {
-            const jsonPayload = { ...formData, category_id: parseInt(formData.category_id.toString(), 10) }
+            const changes: Partial<Product> = {}
+
+            if (formData.category_id !== undefined) {
+                changes.category_id = parseInt(formData.category_id.toString(), 10)
+            }
 
             if (thumbnailFile) {
-                jsonPayload.thumbnail = await uploadFile(thumbnailFile)
+                changes.thumbnail = await uploadFile(thumbnailFile)
             }
 
             if (imageFiles.length > 0) {
-                jsonPayload.images = await Promise.all(imageFiles.map(file => uploadFile(file)))
+                changes.images = await Promise.all(imageFiles.map(file => uploadFile(file)))
             }
-            console.log('jsonPayload:', jsonPayload)
-            const response = await axiosWithAuth.put(`/products/${productId}`, jsonPayload, {
+
+            // Compare each form data field with the current product data
+            Object.keys(formData).forEach(key => {
+                if (formData[key as keyof Product] !== currentProduct?.[key as keyof Product]) {
+                    changes[key as keyof Product] = formData[key as keyof Product]
+                }
+            })
+
+            const response = await axiosWithAuth.put(`/products/${productId}`, changes, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -84,25 +86,9 @@ const AdminUpdateProductsPage = () => {
 
             if (response.data) {
                 setProducts(products.map(product =>
-                    product.id === productId ? { ...product, ...formData } : product
+                    product.id === productId ? { ...product, ...changes } : product
                 ))
-                setIsModalOpen(false)
-                setCurrentProduct(null)
-                setFormData({
-                    title: '',
-                    description: '',
-                    price: 0,
-                    discount_percentage: 0,
-                    rating: 0,
-                    stock: 0,
-                    brand: '',
-                    category_id: 0,
-                    thumbnail: '',
-                    images: [''],
-                    is_published: true,
-                })
-                setThumbnailFile(null)
-                setImageFiles([])
+                closeModal()
             }
         } catch (error) {
             setError('Ошибка при обновлении продукта')
@@ -123,47 +109,23 @@ const AdminUpdateProductsPage = () => {
 
     const openModal = (product: Product) => {
         setCurrentProduct(product)
-        setFormData({
-            title: product.title,
-            description: product.description,
-            price: product.price,
-            discount_percentage: product.discount_percentage,
-            rating: product.rating,
-            stock: product.stock,
-            brand: product.brand,
-            category_id: product.category_id,
-            thumbnail: product.thumbnail,
-            images: product.images,
-            is_published: product.is_published,
-        })
+        setFormData(product)
         setIsModalOpen(true)
     }
 
     const closeModal = () => {
         setIsModalOpen(false)
         setCurrentProduct(null)
-        setFormData({
-            title: '',
-            description: '',
-            price: 0,
-            discount_percentage: 0,
-            rating: 0,
-            stock: 0,
-            brand: '',
-            category_id: 0,
-            thumbnail: '',
-            images: [''],
-            is_published: true,
-        })
+        setFormData({})
         setThumbnailFile(null)
         setImageFiles([])
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
+        const { name, value, type, checked } = e.target
         setFormData({
             ...formData,
-            [name]: name === 'price' || name === 'discount_percentage' || name === 'rating' || name === 'stock' || name === 'category_id' ? parseInt(value) : value
+            [name]: type === 'checkbox' ? checked : value,
         })
     }
 
@@ -199,8 +161,8 @@ const AdminUpdateProductsPage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {products.map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-lg shadow-lg text-center">
-                            <img
-                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${product.thumbnail}`}
+                            <Image width={500} height={500}
+                                src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-48 object-cover rounded mb-4"
                             />
@@ -219,17 +181,17 @@ const AdminUpdateProductsPage = () => {
                 </div>
             </div>
 
-            {isModalOpen && (
+            {isModalOpen && currentProduct && (
                 <Modal onClose={closeModal}>
                     <div className="p-6 max-h-[80vh] overflow-y-auto">
                         <h2 className="text-xl font-bold mb-4">Обновить продукт</h2>
-                        <form onSubmit={(e) => { e.preventDefault(); handleUpdate(currentProduct!.id) }}>
+                        <form onSubmit={(e) => { e.preventDefault(); handleUpdate(currentProduct.id) }}>
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2">Название</label>
                                 <input
                                     type="text"
                                     name="title"
-                                    value={formData.title}
+                                    value={formData.title || ''}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -239,7 +201,7 @@ const AdminUpdateProductsPage = () => {
                                 <label className="block text-gray-700 mb-2">Описание</label>
                                 <textarea
                                     name="description"
-                                    value={formData.description}
+                                    value={formData.description || ''}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -250,7 +212,7 @@ const AdminUpdateProductsPage = () => {
                                 <input
                                     type="number"
                                     name="price"
-                                    value={formData.price}
+                                    value={formData.price || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -261,7 +223,7 @@ const AdminUpdateProductsPage = () => {
                                 <input
                                     type="number"
                                     name="discount_percentage"
-                                    value={formData.discount_percentage}
+                                    value={formData.discount_percentage || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -272,7 +234,7 @@ const AdminUpdateProductsPage = () => {
                                 <input
                                     type="number"
                                     name="rating"
-                                    value={formData.rating}
+                                    value={formData.rating || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -283,7 +245,7 @@ const AdminUpdateProductsPage = () => {
                                 <input
                                     type="number"
                                     name="stock"
-                                    value={formData.stock}
+                                    value={formData.stock || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -294,7 +256,7 @@ const AdminUpdateProductsPage = () => {
                                 <input
                                     type="text"
                                     name="brand"
-                                    value={formData.brand}
+                                    value={formData.brand || ''}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -304,7 +266,7 @@ const AdminUpdateProductsPage = () => {
                                 <label className="block text-gray-700 mb-2">Категория</label>
                                 <select
                                     name="category_id"
-                                    value={formData.category_id}
+                                    value={formData.category_id || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
@@ -333,6 +295,26 @@ const AdminUpdateProductsPage = () => {
                                     onChange={handleFileChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     multiple
+                                />
+                            </div>
+                            <div className="mb-4 flex items-center">
+                                <label className="block text-gray-700 mr-4">Избранный</label>
+                                <input
+                                    type="checkbox"
+                                    name="favourite"
+                                    checked={formData.favourite || false}
+                                    onChange={handleChange}
+                                    className="h-5 w-5"
+                                />
+                            </div>
+                            <div className="mb-4 flex items-center">
+                                <label className="block text-gray-700 mr-4">Рекомендованный</label>
+                                <input
+                                    type="checkbox"
+                                    name="recomended"
+                                    checked={formData.recomended || false}
+                                    onChange={handleChange}
+                                    className="h-5 w-5"
                                 />
                             </div>
                             <button

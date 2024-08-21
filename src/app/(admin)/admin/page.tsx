@@ -36,15 +36,16 @@ export default function AdminPage() {
                 { title: "Создать продукт", desc: "Управляйте созданием продукта", link: "create-product" },
                 { title: "Удалить продукт", desc: "Управляйте удалением продукта", link: "delete-product" },
                 { title: "Обновить продукт", desc: "Управляйте обновлением продукта", link: "update-product" },
+
             ]
         },
-        {
-            category: "catalog", items: [
-                { title: "Создать каталог", desc: "Управляйте созданием каталога", link: "create-category" },
-                { title: "Удалить каталог", desc: "Управляйте удалением каталога", link: "delete-category" },
-                { title: "Обновить каталог", desc: "Управляйте обновлением каталога", link: "update-category" },
-            ]
-        },
+        // {
+        //     category: "catalog", items: [
+        //         { title: "Создать каталог", desc: "Управляйте созданием каталога", link: "create-category" },
+        //         { title: "Удалить каталог", desc: "Управляйте удалением каталога", link: "delete-category" },
+        //         { title: "Обновить каталог", desc: "Управляйте обновлением каталога", link: "update-category" },
+        //     ]
+        // },
 
         {
             category: "blog", items: [
@@ -53,17 +54,17 @@ export default function AdminPage() {
                 { title: "Обновить блог", desc: "Управляйте обновлением блога", link: "update-blog" },
             ]
         },
-        {
-            category: "header elements", items: [
-                { title: "Добавить элемент в шапку", desc: "Управляйте добавлением элементов в шапку", link: "create-header-tab" },
-                { title: "Удалить элемент из шапки", desc: "Управляйте добавлением элементов в шапку", link: "delete-header-tab" },
+        // {
+        //     category: "header elements", items: [
+        //         { title: "Добавить элемент в шапку", desc: "Управляйте добавлением элементов в шапку", link: "create-header-tab" },
+        //         { title: "Удалить элемент из шапки", desc: "Управляйте добавлением элементов в шапку", link: "delete-header-tab" },
 
-                { title: "Добавить подэлемент в шапку", desc: "Управляйте добавлением подэлементов в шапку", link: "create-sub-header-tab" },
-                { title: "Добавить продукты в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-product" },
-                { title: "Добавить Статью в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-articles" }
+        //         { title: "Добавить подэлемент в шапку", desc: "Управляйте добавлением подэлементов в шапку", link: "create-sub-header-tab" },
+        //         { title: "Добавить продукты в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-product" },
+        //         { title: "Добавить Статью в шапку", desc: "Управляйте добавлением продуктов в шапку", link: "create-header-articles" }
 
-            ]
-        }
+        //     ]
+        // }
 
 
     ]

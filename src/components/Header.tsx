@@ -27,26 +27,26 @@ const Header = () => {
     const [searchResults, setSearchResults] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
-    const [subHeaderTabs, setSubHeaderTabs] = useState<SubHeaderTab[]>([])
-    const [headerTabs, setHeaderTabs] = useState<HeaderTab[]>([])
+    const [parentCategory, setparentCategory] = useState<SubHeaderTab[]>([])
+    const [grandCategory, setgrandCategory] = useState<HeaderTab[]>([])
     const [childCategories, setChildCategories] = useState<ChildCategory[]>([])
 
     useEffect(() => {
-        const fetchHeaderTabs = async () => {
+        const fetchgrandCategory = async () => {
             try {
                 const response = await AxiosDefault.get('/category_grand/')
-                console.log('HeaderTabs:', response.data)
-                setHeaderTabs(response.data.data)
+                console.log('grandCategory:', response.data)
+                setgrandCategory(response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке категорий:', error)
             }
         }
 
-        const fetchSubHeaderTabs = async () => {
+        const fetchparentCategory = async () => {
             try {
                 const response = await AxiosDefault.get('/category_parent/')
-                console.log('SubHeaderTabs:', response.data.data)
-                setSubHeaderTabs(response.data.data)
+                console.log('parentCategory:', response.data.data)
+                setparentCategory(response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке категорий:', error)
             }
@@ -62,14 +62,19 @@ const Header = () => {
             }
         }
 
-        fetchHeaderTabs()
-        fetchSubHeaderTabs()
+        fetchgrandCategory()
+        fetchparentCategory()
         fetchChildCategories()
     }, [])
 
     const handleCategoryClick = (categoryId: number) => {
-        setSelectedCategory(prevCategoryId => prevCategoryId === categoryId ? null : categoryId)
+        setSelectedCategory(prevCategoryId => (prevCategoryId === categoryId ? null : categoryId))
     }
+
+    const closeDropdown = () => {
+        setSelectedCategory(null)
+    }
+
 
     const handleSearch = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -203,7 +208,7 @@ const Header = () => {
                 <Link href="/promotions" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Акции</Link>
                 <Link href="/news" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Новости</Link>
                 <Link href="/contacts" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Контакты</Link>
-                {headerTabs.map(headerTab => (
+                {grandCategory.map(headerTab => (
                     <div key={headerTab.id} className=" group">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
@@ -214,39 +219,59 @@ const Header = () => {
                         {selectedCategory === headerTab.id && (
                             <div className="absolute left-0 w-full bg-white shadow-lg z-20 mt-2">
                                 <div className="grid grid-cols-4 gap-4 p-4">
-                                    {subHeaderTabs.filter(subHeaderTab => subHeaderTab.grand_category_id === headerTab.id).map(subHeaderTab => (
-                                        <div className='' key={subHeaderTab.id}>
-                                            <Image
-                                                priority
-                                                width={1000}
-                                                height={1000}
-                                                alt={subHeaderTab.name}
-                                                src={`${process.env.NEXT_PUBLIC_S3_URL}${subHeaderTab.image_path}`}
-                                                className="w-1/3 h-auto mx-auto object-cover rounded"
-                                            />
-                                            <Link
-                                                href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}`}
-                                                className="block px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-                                            >
-                                                {subHeaderTab.name}
-                                            </Link>
-                                            {/* Render child categories if they exist */}
-                                            {childCategories.filter(child => child.parent_category_id === subHeaderTab.id).map(child => (
+                                    {parentCategory
+                                        .filter(subHeaderTab => subHeaderTab.grand_category_id === headerTab.id)
+                                        .map(subHeaderTab => (
+                                            <div key={subHeaderTab.id} className=''>
+                                                <Image
+                                                    priority
+                                                    width={1000}
+                                                    height={1000}
+                                                    alt={subHeaderTab.name}
+                                                    src={`${process.env.NEXT_PUBLIC_S3_URL}${subHeaderTab.image_path}`}
+                                                    className="w-1/3 h-auto mx-auto object-cover rounded"
+                                                />
                                                 <Link
-                                                    key={child.id}
-                                                    href={`/header-tabs/${headerTab.name}/${subHeaderTab.name}/${child.name}`}
-                                                    className="block px-4 py-1 ml-4 text-gray-600 hover:bg-gray-100"
+                                                    href={{
+                                                        pathname: `/products`,
+                                                        query: {
+                                                            grand_category: headerTab.name,
+                                                            parent_category: subHeaderTab.name.toLowerCase(),
+                                                        },
+                                                    }}
+                                                    className="block px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+                                                    onClick={closeDropdown}  // Close dropdown when clicked
                                                 >
-                                                    {child.name}
+                                                    {subHeaderTab.name}
                                                 </Link>
-                                            ))}
-                                        </div>
-                                    ))}
+                                                {/* Render child categories if they exist */}
+                                                {childCategories
+                                                    .filter(child => child.parent_category_id === subHeaderTab.id)
+                                                    .map(child => (
+                                                        <Link
+                                                            key={child.id}
+                                                            href={{
+                                                                pathname: `/products`,
+                                                                query: {
+                                                                    grand_category: headerTab.name,
+                                                                    parent_category: subHeaderTab.name.toLowerCase(),
+                                                                    child_category: child.name.toLowerCase(),
+                                                                },
+                                                            }}
+                                                            className="block px-4 py-1 ml-4 text-gray-600 hover:bg-gray-100"
+                                                            onClick={closeDropdown}  // Close dropdown when clicked
+                                                        >
+                                                            {child.name}
+                                                        </Link>
+                                                    ))}
+                                            </div>
+                                        ))}
                                 </div>
                             </div>
                         )}
                     </div>
                 ))}
+
             </nav>
         </header>
     )
