@@ -11,23 +11,23 @@ export default function AdminPage() {
     const [errorText, setErrorText] = useState('')
     const paths = [
         {
-            category: "Grand Category", items: [
-                { title: "create new grand category", desc: "...", link: "create-grand-category" },
-                { title: "delete grand category", desc: "...", link: "get-all-grand-category" },
+            category: "Главная категория", items: [
+                { title: "Создать категорию", desc: "...", link: "create-grand-category" },
+                { title: "Удалить категорию", desc: "...", link: "get-all-grand-category" },
 
             ]
         },
         {
-            category: "Parent Category", items: [
-                { title: "create new parent category", desc: "...", link: "create-parent-category" },
-                { title: "delete parent category", desc: "...", link: "get-all-parent-category" },
+            category: "ПодКатегория", items: [
+                { title: "Создать категорию", desc: "...", link: "create-parent-category" },
+                { title: "Удалить категорию", desc: "...", link: "get-all-parent-category" },
 
             ]
         },
         {
-            category: "Child Category", items: [
-                { title: "create new child category", desc: "...", link: "create-child-category" },
-                { title: "delete child category", desc: "...", link: "get-all-child-category" },
+            category: "Категория продукта", items: [
+                { title: "Создать категорию", desc: "...", link: "create-child-category" },
+                { title: "Удалить категорию", desc: "...", link: "get-all-child-category" },
 
             ]
         },
