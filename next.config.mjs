@@ -9,8 +9,8 @@ const nextConfig = {
 				pathname: '/s3/static/**',
 			},
 			{
-				protocol: 'https',
-				hostname: 'daididau.kz',
+				protocol: 'http',
+				hostname: '194.110.55.21',
 				port: '',
 				pathname: '/s3/static/**',
 			},
