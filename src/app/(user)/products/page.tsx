@@ -186,9 +186,9 @@ function ProductsPageContent() {
                                 </button>
                                 <ul className="pl-4">
                                     {grandCategory.parent_categories.map(parentCategory => (
-                                        <li key={parentCategory.id} className="mb-2 text-left">
+                                        <li key={parentCategory.id} className="mb-2">
                                             <button
-                                                className={`font-medium text-gray-700 hover:text-gray-900 transition-transform transform active:scale-95 ${parentCategory.name.toLowerCase() === searchParams.get('parent_category') ? 'text-blue-600' : ''}`}
+                                                className={`font-medium text-left text-gray-700 hover:text-gray-900 transition-transform transform active:scale-95 ${parentCategory.name.toLowerCase() === searchParams.get('parent_category') ? 'text-blue-600' : ''}`}
                                                 onClick={() => router.push(`/products?grand_category=${grandCategory.name}&parent_category=${parentCategory.name}`)}
                                             >
                                                 {parentCategory.name}
