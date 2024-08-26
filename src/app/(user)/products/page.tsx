@@ -195,7 +195,7 @@ function ProductsPageContent() {
                                             </button>
                                             <ul className="pl-4">
                                                 {parentCategory.child_categories.map(childCategory => (
-                                                    <li key={childCategory.id} className="mb-2 text-right">
+                                                    <li key={childCategory.id} className="mb-2 text-left">
                                                         <button
                                                             className={`text-gray-600 hover:text-gray-800 transition-transform transform active:scale-95 ${childCategory.name.toLowerCase() === searchParams.get('child_category') ? 'font-bold' : ''}`}
                                                             onClick={() =>
