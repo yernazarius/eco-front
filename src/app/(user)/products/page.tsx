@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 interface Product {
     id: number
@@ -40,9 +41,28 @@ interface Category {
     name: string
 }
 
+interface GrandCategory {
+    id: number
+    name: string
+    parent_categories: ParentCategory[]
+}
+
+interface ParentCategory {
+    id: number
+    name: string
+    grand_category_id: number
+    child_categories: ChildCategory[]
+}
+
+interface ChildCategory {
+    id: number
+    name: string
+    parent_category_id: number
+}
+
 function ProductsPageContent() {
     const [products, setProducts] = useState<Product[]>([])
-    const [categories, setCategories] = useState<Category[]>([])
+    const [grandCategories, setGrandCategories] = useState<GrandCategory[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [searchResults, setSearchResults] = useState<Product[]>([])
     const [searchQuery, setSearchQuery] = useState<string>('')
@@ -58,7 +78,6 @@ function ProductsPageContent() {
         const fetchProducts = async () => {
             try {
                 const response = await AxiosDefault.get('/products?page=1&limit=100')
-                console.log('Products:', response)
                 setProducts(response.data.data)
                 setSearchResults(response.data.data)
             } catch (error) {
@@ -68,7 +87,32 @@ function ProductsPageContent() {
             }
         }
 
+        const fetchCategories = async () => {
+            try {
+                const grandResponse = await AxiosDefault.get('/category_grand')
+                const parentResponse = await AxiosDefault.get('/category_parent')
+                const childResponse = await AxiosDefault.get('/category_child')
+
+                const grandCategories = grandResponse.data.data.map((grand: GrandCategory) => ({
+                    ...grand,
+                    parent_categories: parentResponse.data.data
+                        .filter((parent: ParentCategory) => parent.grand_category_id === grand.id)
+                        .map((parent: ParentCategory) => ({
+                            ...parent,
+                            child_categories: childResponse.data.data.filter(
+                                (child: ChildCategory) => child.parent_category_id === parent.id
+                            )
+                        }))
+                }))
+
+                setGrandCategories(grandCategories)
+            } catch (error) {
+                console.error('Ошибка при загрузке категорий:', error)
+            }
+        }
+
         fetchProducts()
+        fetchCategories()
     }, [])
 
     useEffect(() => {
@@ -109,7 +153,7 @@ function ProductsPageContent() {
 
     const clearFilters = () => {
         setSearchResults(products)
-        router.push('/products')  // This will navigate to /products and clear query parameters
+        router.push('/products')  // Clear query parameters
     }
 
     if (loading) {
@@ -128,19 +172,44 @@ function ProductsPageContent() {
                     <ul>
                         <li
                             className={`mb-2 ${!parentCategory && !childCategory ? 'font-bold' : ''}`}
-                            onClick={clearFilters}  // Clear the filters when "Все" is clicked
+                            onClick={clearFilters}
                         >
-                            <button className="text-gray-800 hover:text-gray-600">Все</button>
+                            <button className="text-gray-800 hover:text-gray-600 transition-transform transform active:scale-95">Все</button>
                         </li>
-                        {categories.map(category => (
-                            <li
-                                key={category.id}
-                                className={`mb-2 ${childCategory === category.name.toLowerCase() || parentCategory === category.name.toLowerCase() ? 'font-bold' : ''}`}
-                                onClick={() => setSearchResults(products.filter(product => product.child_category.name.toLowerCase() === category.name.toLowerCase()))}
-                            >
-                                <button className="text-gray-800 hover:text-gray-600">
-                                    {category.name}
+                        {grandCategories.map(grandCategory => (
+                            <li key={grandCategory.id} className="mb-2">
+                                <button
+                                    className={`font-bold text-gray-800 hover:text-gray-600 transition-transform transform active:scale-95 ${grandCategory.name.toLowerCase() === searchParams.get('grand_category') ? 'text-blue-600' : ''}`}
+                                    onClick={() => router.push(`/products?grand_category=${grandCategory.name}`)}
+                                >
+                                    {grandCategory.name}
                                 </button>
+                                <ul className="pl-4">
+                                    {grandCategory.parent_categories.map(parentCategory => (
+                                        <li key={parentCategory.id} className="mb-2">
+                                            <button
+                                                className={`font-medium text-gray-700 hover:text-gray-900 transition-transform transform active:scale-95 ${parentCategory.name.toLowerCase() === searchParams.get('parent_category') ? 'text-blue-600' : ''}`}
+                                                onClick={() => router.push(`/products?grand_category=${grandCategory.name}&parent_category=${parentCategory.name}`)}
+                                            >
+                                                {parentCategory.name}
+                                            </button>
+                                            <ul className="pl-4">
+                                                {parentCategory.child_categories.map(childCategory => (
+                                                    <li key={childCategory.id} className="mb-2">
+                                                        <button
+                                                            className={`text-gray-600 hover:text-gray-800 transition-transform transform active:scale-95 ${childCategory.name.toLowerCase() === searchParams.get('child_category') ? 'font-bold' : ''}`}
+                                                            onClick={() =>
+                                                                router.push(`/products?grand_category=${grandCategory.name}&parent_category=${parentCategory.name}&child_category=${childCategory.name}`)
+                                                            }
+                                                        >
+                                                            {childCategory.name}
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </li>
+                                    ))}
+                                </ul>
                             </li>
                         ))}
                     </ul>
@@ -158,30 +227,36 @@ function ProductsPageContent() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="px-4 py-2 border rounded-md w-1/2"
                         />
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Search</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2 transition-transform transform active:scale-95">Search</button>
                     </form>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <TransitionGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {searchResults.map(product => (
-                            <Link key={product.id} href={`/products/${product.child_category.name.toLowerCase()}/${product.id}`}
-                                passHref>
-                                <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer">
-                                    <Image
-                                        width={500}
-                                        height={500}
-                                        src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
-                                        alt={product.title}
-                                        className="w-full h-48 object-cover rounded mb-4"
-                                    />
-                                    <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
-                                    <p className="text-gray-700 mb-2">{product.description}</p>
-                                    <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
-                                    <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
-                                    <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
-                                    <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
-                                </div>
-                            </Link>
+                            <CSSTransition
+                                key={product.id}
+                                timeout={500}
+                                classNames="product"
+                            >
+                                <Link href={`/products/${product.child_category.name.toLowerCase()}/${product.id}`} passHref>
+                                    <div className="bg-white p-6 rounded-lg shadow-lg cursor-pointer h-full flex flex-col justify-between">
+                                        <div className="flex-grow">
+                                            <Image
+                                                width={500}
+                                                height={500}
+                                                src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
+                                                alt={product.title}
+                                                className="w-full h-48 object-cover rounded mb-4"
+                                            />
+                                            <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
+                                            <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
+                                            <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
+                                            <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
+                                            <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </CSSTransition>
                         ))}
-                    </div>
+                    </TransitionGroup>
                 </main>
             </div>
         </div>
