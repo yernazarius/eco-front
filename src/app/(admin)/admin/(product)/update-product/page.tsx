@@ -9,6 +9,11 @@ interface Category {
     name: string
 }
 
+interface Brand {
+    id: number
+    name: string
+}
+
 interface Product {
     id: number
     title: string
@@ -17,10 +22,10 @@ interface Product {
     discount_percentage: number
     rating: number
     stock: number
-    brand: string
+    brands_id: number
     thumbnail: string
     images: string[]
-    category_id: number
+    child_category_id: number
     is_published: boolean
     favourite: boolean
     recomended: boolean
@@ -29,6 +34,7 @@ interface Product {
 const AdminUpdateProductsPage = () => {
     const [products, setProducts] = useState<Product[]>([])
     const [categories, setCategories] = useState<Category[]>([])
+    const [brands, setBrands] = useState<Brand[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -42,11 +48,14 @@ const AdminUpdateProductsPage = () => {
             try {
                 const productResponse = await AxiosDefault.get('/products')
                 const categoryResponse = await AxiosDefault.get('/category_child')
+                const brandResponse = await AxiosDefault.get('/brands')
+
                 setProducts(productResponse.data.data)
                 setCategories(categoryResponse.data.data)
+                setBrands(brandResponse.data.data)
             } catch (error) {
-                setError('Ошибка при загрузке продуктов или категорий')
-                console.error('Ошибка при загрузке продуктов или категорий:', error)
+                setError('Ошибка при загрузке продуктов, категорий или брендов')
+                console.error('Ошибка при загрузке данных:', error)
             } finally {
                 setLoading(false)
             }
@@ -59,8 +68,12 @@ const AdminUpdateProductsPage = () => {
         try {
             const changes: Partial<Product> = {}
 
-            if (formData.category_id !== undefined) {
-                changes.category_id = parseInt(formData.category_id.toString(), 10)
+            if (formData.child_category_id !== undefined && formData.child_category_id !== currentProduct?.child_category_id) {
+                changes.child_category_id = Number(formData.child_category_id)
+            }
+
+            if (formData.brands_id !== undefined && formData.brands_id !== currentProduct?.brands_id) {
+                changes.brands_id = Number(formData.brands_id)
             }
 
             if (thumbnailFile) {
@@ -71,11 +84,10 @@ const AdminUpdateProductsPage = () => {
                 changes.images = await Promise.all(imageFiles.map(file => uploadFile(file)))
             }
 
-            // Compare each form data field with the current product data
             Object.keys(formData).forEach(key => {
-                if (formData[key as keyof Product] !== currentProduct?.[key as keyof Product]) {
-                    // @ts-ignore
-                    changes[key as keyof Product] = formData[key as keyof Product]
+                const typedKey = key as keyof Product
+                if (formData[typedKey] !== currentProduct?.[typedKey]) {
+                    changes[typedKey] = formData[typedKey] as any
                 }
             })
 
@@ -96,6 +108,7 @@ const AdminUpdateProductsPage = () => {
             console.error('Ошибка при обновлении продукта:', error)
         }
     }
+
 
     const uploadFile = async (file: File): Promise<string> => {
         const formData = new FormData()
@@ -132,12 +145,14 @@ const AdminUpdateProductsPage = () => {
                 [name]: checked,
             }))
         } else {
+            const fieldName = name === 'category_id' ? 'child_category_id' : name === 'brand_id' ? 'brands_id' : name
             setFormData(prevState => ({
                 ...prevState,
-                [name]: value,
+                [fieldName]: value,
             }))
         }
     }
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target
@@ -179,7 +194,6 @@ const AdminUpdateProductsPage = () => {
                             <h2 className="text-lg font-bold mb-1">{product.title}</h2>
                             <p className="text-gray-900 font-semibold mb-1">${product.price}</p>
                             <p className="text-gray-600 mb-1">В наличии: {product.stock}</p>
-                            <p className="text-gray-600 mb-1">Бренд: {product.brand}</p>
                             <button
                                 onClick={() => openModal(product)}
                                 className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 ease-in-out"
@@ -263,24 +277,35 @@ const AdminUpdateProductsPage = () => {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2">Бренд</label>
-                                <input
-                                    type="text"
-                                    name="brand"
-                                    value={formData.brand || ''}
+                                <select
+                                    name="brand_id"
+                                    value={formData.brands_id || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
-                                />
+                                >
+                                    <option value={0} disabled>
+                                        Выберите брэнд
+                                    </option>
+                                    {brands.map(brand => (
+                                        <option key={brand.id} value={brand.id}>
+                                            {brand.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2">Категория</label>
                                 <select
                                     name="category_id"
-                                    value={formData.category_id || 0}
+                                    value={formData.child_category_id || 0}
                                     onChange={handleChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     required
                                 >
+                                    <option value={0} disabled>
+                                        Выберите категорию
+                                    </option>
                                     {categories.map(category => (
                                         <option key={category.id} value={category.id}>
                                             {category.name}
