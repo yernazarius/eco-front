@@ -13,7 +13,11 @@ interface Product {
     discount_percentage: number
     rating: number
     stock: number
-    brand: string
+    brands_id: string
+    brand: {
+        id: number
+        name: string
+    }
     thumbnail: string
     images: string[]
     is_published: boolean
@@ -79,8 +83,8 @@ const ProductPage = () => {
                         <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
                         <p className="text-gray-700 mb-4">{product.description}</p>
                         <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
-                        <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
-                        <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
+                        <p className="text-gray-600 mb-2">В наличии: {product.brand.name}</p>
+                        {/* <p className="text-gray-600 mb-2">Бренд: {product.brand}</p> */}
                         <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
                         {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
                     </div>
