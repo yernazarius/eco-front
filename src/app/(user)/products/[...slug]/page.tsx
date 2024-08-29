@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation'
 import { AxiosDefault } from '@/api/interceptors'
 import Header from '@/components/Header'
 import ImageSlider from '@/components/Products/ImageSlider'
+import Link from 'next/link'
+
 
 interface Product {
     id: number
@@ -87,6 +89,7 @@ const ProductPage = () => {
                         {/* <p className="text-gray-600 mb-2">Бренд: {product.brand}</p> */}
                         <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
                         {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
+                        <Link href="tel:+77075246868" className="px-4 py-2 bg-blue-500 text-white rounded">Задать вопрос</Link>
                     </div>
                 </div>
             </div>
