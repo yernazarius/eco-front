@@ -296,7 +296,7 @@ function ProductsPageContent() {
                                                 alt={product.title}
                                                 className="w-full h-48 object-cover rounded mb-4"
                                             />
-                                            <h2 className="text-xl font-bold mb-2">{product.title}</h2>
+                                            <h2 className="text-lg font-bold mb-2">{product.title}</h2>
                                             <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
                                             <p className="text-gray-600 mb-2">Бренд: {product.brand.name}</p>
                                         </div>
