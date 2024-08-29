@@ -11,6 +11,11 @@ interface Category {
     parent_category_id: string
 }
 
+interface Brand {
+    id: number
+    name: string
+}
+
 const CreateProduct = () => {
     const [formData, setFormData] = useState({
         title: '',
@@ -19,7 +24,7 @@ const CreateProduct = () => {
         discount_percentage: 0,
         rating: 0,
         stock: 0,
-        brand: '',
+        brands_id: 0,
         thumbnail: '',
         images: [''],
         child_category_id: 0,
@@ -30,6 +35,7 @@ const CreateProduct = () => {
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
     const [imageFiles, setImageFiles] = useState<File[]>([])
     const [categories, setCategories] = useState<Category[]>([])
+    const [brands, setBrands] = useState<Brand[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -42,8 +48,19 @@ const CreateProduct = () => {
         }
     }
 
+    const fetchBrands = async () => {
+        try {
+            const response = await AxiosDefault.get('/brands/')
+            setBrands(response.data.data)
+            console.log('brands', response.data.data)
+        } catch (error) {
+            console.error('Error fetching brands', error)
+        }
+    }
+
     useEffect(() => {
         fetchCategories()
+        fetchBrands()
     }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -51,7 +68,7 @@ const CreateProduct = () => {
 
         setFormData({
             ...formData,
-            [name]: type === 'number' || name === 'child_category_id'
+            [name]: type === 'number' || name === 'child_category_id' || name === 'brands_id'
                 ? parseInt(value)
                 : (type === 'select-one' && (name === 'favourite' || name === 'recomended'))
                     ? value === 'true'
@@ -205,14 +222,22 @@ const CreateProduct = () => {
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Бренд</label>
-                        <input
-                            type="text"
-                            name="brand"
-                            value={formData.brand}
+                        <select
+                            name="brands_id"
+                            value={formData.brands_id}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
                             required
-                        />
+                        >
+                            <option value={0} disabled>
+                                Выберите брэнд
+                            </option>
+                            {brands.map(brand => (
+                                <option key={brand.id} value={brand.id}>
+                                    {brand.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Категория</label>

@@ -93,6 +93,7 @@ const CreateCategory = () => {
 							className="w-full p-2 border border-gray-300 rounded"
 							required
 						>
+							<option value={0}>Выберите категорию</option>
 							{parentCategories.map(item => (
 								<option key={item.id} value={item.id}>
 									{item.name}

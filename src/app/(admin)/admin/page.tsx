@@ -32,7 +32,14 @@ export default function AdminPage() {
             ]
         },
         {
-            category: "product", items: [
+            category: "Брэнд продукта", items: [
+                { title: "Создать брэнд", desc: "...", link: "create-brand" },
+                { title: "Удалить брэнд", desc: "...", link: "get-all-brands" },
+
+            ]
+        },
+        {
+            category: "Продукт", items: [
                 { title: "Создать продукт", desc: "Управляйте созданием продукта", link: "create-product" },
                 { title: "Удалить продукт", desc: "Управляйте удалением продукта", link: "delete-product" },
                 { title: "Обновить продукт", desc: "Управляйте обновлением продукта", link: "update-product" },

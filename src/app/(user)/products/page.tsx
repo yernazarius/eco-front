@@ -16,7 +16,11 @@ interface Product {
     discount_percentage: number
     rating: number
     stock: number
-    brand: string
+    brands_id: number
+    brand: {
+        id: number
+        name: string
+    }
     thumbnail: string
     images: string[]
     is_published: boolean
@@ -60,12 +64,19 @@ interface ChildCategory {
     parent_category_id: number
 }
 
+interface Brands {
+    id: number
+    name: string
+}
+
 function ProductsPageContent() {
     const [products, setProducts] = useState<Product[]>([])
     const [grandCategories, setGrandCategories] = useState<GrandCategory[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [searchResults, setSearchResults] = useState<Product[]>([])
     const [searchQuery, setSearchQuery] = useState<string>('')
+    const [brands, setBrands] = useState<Brands[]>([])
+    const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
 
     const searchParams = useSearchParams()
     const grandCategory = searchParams.get('grand_category')
@@ -82,6 +93,18 @@ function ProductsPageContent() {
                 setSearchResults(response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке продуктов:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        const fetchBrands = async () => {
+            try {
+                const response = await AxiosDefault.get('/brands')
+                setBrands(response.data.data)
+                console.log('brands', response.data.data)
+            } catch (error) {
+                console.error('Ошибка при загрузке брендов:', error)
             } finally {
                 setLoading(false)
             }
@@ -113,6 +136,7 @@ function ProductsPageContent() {
 
         fetchProducts()
         fetchCategories()
+        fetchBrands()
     }, [])
 
     useEffect(() => {
@@ -137,9 +161,15 @@ function ProductsPageContent() {
                 )
             }
 
+            if (selectedBrand) {
+                filtered = filtered.filter(product =>
+                    product.brand.name.toLowerCase() === selectedBrand.toLowerCase()
+                )
+            }
+
             setSearchResults(filtered)
         }
-    }, [loading, grandCategory, parentCategory, childCategory, products])
+    }, [loading, grandCategory, parentCategory, childCategory, selectedBrand, products])
 
     const handleSearch = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -153,6 +183,7 @@ function ProductsPageContent() {
 
     const clearFilters = () => {
         setSearchResults(products)
+        setSelectedBrand(null)
         router.push('/products')  // Clear query parameters
     }
 
@@ -213,6 +244,25 @@ function ProductsPageContent() {
                             </li>
                         ))}
                     </ul>
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800 mt-8">Бренды</h2>
+                    <ul>
+                        <li
+                            className={`mb-2 ${!selectedBrand ? 'font-bold' : ''}`}
+                            onClick={() => setSelectedBrand(null)}
+                        >
+                            <button className="text-gray-800 hover:text-gray-600 transition-transform transform active:scale-95">Все бренды</button>
+                        </li>
+                        {brands.map(brand => (
+                            <li key={brand.id} className="mb-2">
+                                <button
+                                    className={`text-gray-800 hover:text-gray-600 transition-transform transform active:scale-95 ${selectedBrand === brand.name ? 'font-bold' : ''}`}
+                                    onClick={() => setSelectedBrand(brand.name)}
+                                >
+                                    {brand.name}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </aside>
                 <main className="w-3/4">
                     <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 flex items-center justify-center">
@@ -249,7 +299,7 @@ function ProductsPageContent() {
                                             <h2 className="text-xl font-bold mb-2">{product.title}</h2>
                                             <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
                                             <p className="text-gray-600 mb-2">В наличии: {product.stock}</p>
-                                            <p className="text-gray-600 mb-2">Бренд: {product.brand}</p>
+                                            <p className="text-gray-600 mb-2">Бренд: {product.brand.name}</p>
                                             <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
                                         </div>
                                     </div>
