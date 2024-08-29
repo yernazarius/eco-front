@@ -1,7 +1,6 @@
 "use client"
 import { AxiosDefault } from '@/api/interceptors'
 import Image from 'next/image'
-
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -59,14 +58,16 @@ export default function HomePageProducts() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {favouriteProducts.map(product => (
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
-                        <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center">
-                            <Image width={300} height={300}
+                        <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center h-full">
+                            <Image
+                                width={300}
+                                height={300}
                                 src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />
-                            <h3 className="text-lg font-bold mb-2">{product.title}</h3>
-                            <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 mx-4">Подробнее</button>
+                            <h3 className="text-lg font-bold mb-2 h-12">{product.title}</h3>
+                            <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 mx-4 mt-auto">Подробнее</button>
                         </div>
                     </Link>
                 ))}
