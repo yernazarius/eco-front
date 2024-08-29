@@ -1,8 +1,9 @@
 "use client"
-import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import { AxiosDefault, axiosWithAuth, AxiosS3 } from '@/api/interceptors'
 import Modal from '@/components/Admin/Modal'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Category {
     id: number
@@ -64,6 +65,26 @@ const AdminUpdateProductsPage = () => {
         fetchProductsAndCategories()
     }, [])
 
+    const uploadFileToS3 = async (file: File, dir: string) => {
+        const uuidv4Name = uuidv4()
+        const fileExtension = file.name.split('.').pop()
+        const newFileName = `${dir}/${uuidv4Name}.${fileExtension}`
+        const renamedFile = new File([file], newFileName, { type: file.type })
+
+        const formDataForUpload = new FormData()
+        formDataForUpload.append('file', renamedFile)
+
+        try {
+            const s3Response = await AxiosS3.post(`upload?dir=${dir}&name_of_file=${uuidv4Name}.${fileExtension}`, formDataForUpload)
+            if (s3Response.status !== 200) {
+                throw new Error('Failed to upload file to S3')
+            }
+            return s3Response.data.file_path || newFileName
+        } catch (error) {
+            throw new Error('Error uploading file to S3')
+        }
+    }
+
     const handleUpdate = async (productId: number) => {
         try {
             const changes: Partial<Product> = {}
@@ -77,11 +98,11 @@ const AdminUpdateProductsPage = () => {
             }
 
             if (thumbnailFile) {
-                changes.thumbnail = await uploadFile(thumbnailFile)
+                changes.thumbnail = await uploadFileToS3(thumbnailFile, 'front')
             }
 
             if (imageFiles.length > 0) {
-                changes.images = await Promise.all(imageFiles.map(file => uploadFile(file)))
+                changes.images = await Promise.all(imageFiles.map(file => uploadFileToS3(file, 'front')))
             }
 
             Object.keys(formData).forEach(key => {
@@ -107,18 +128,6 @@ const AdminUpdateProductsPage = () => {
             setError('Ошибка при обновлении продукта')
             console.error('Ошибка при обновлении продукта:', error)
         }
-    }
-
-
-    const uploadFile = async (file: File): Promise<string> => {
-        const formData = new FormData()
-        formData.append('file', file)
-        const response = await axiosWithAuth.post('/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        return response.data.path
     }
 
     const openModal = (product: Product) => {
@@ -152,7 +161,6 @@ const AdminUpdateProductsPage = () => {
             }))
         }
     }
-
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target
