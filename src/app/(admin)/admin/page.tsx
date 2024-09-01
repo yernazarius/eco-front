@@ -83,7 +83,7 @@ export default function AdminPage() {
     return isLoading ? (
         <Loader />
     ) : (
-        <div className="container mx-auto mt-40 bg-white">
+        <div className="container mx-auto mt-40 bg-white mb-20">
             <h1 className="text-center text-3xl font-bold text-gray-800">
                 Admin Dashboard - Welcome, {data?.data.full_name || "DOES NOT WORK"}!
             </h1>

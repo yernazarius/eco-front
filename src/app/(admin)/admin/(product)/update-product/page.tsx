@@ -47,7 +47,7 @@ const AdminUpdateProductsPage = () => {
     useEffect(() => {
         const fetchProductsAndCategories = async () => {
             try {
-                const productResponse = await AxiosDefault.get('/products')
+                const productResponse = await AxiosDefault.get('/products?page=1&limit=100')
                 const categoryResponse = await AxiosDefault.get('/category_child')
                 const brandResponse = await AxiosDefault.get('/brands')
 
