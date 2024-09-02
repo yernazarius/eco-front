@@ -294,7 +294,7 @@ function ProductsPageContent() {
                                                 height={500}
                                                 src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                                 alt={product.title}
-                                                className="w-full h-48 object-cover rounded mb-4"
+                                                className="w-full  rounded mb-4"
                                             />
                                             <h2 className="text-md font-bold mb-2">{product.title}</h2>
                                             <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
