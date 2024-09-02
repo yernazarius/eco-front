@@ -177,15 +177,15 @@ const Header = () => {
                     <div
                         className="absolute hidden group-hover:block z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg"
                     >
-                        <Link href="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
+                        <Link href="/company/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
 
-                        <Link href="/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link>
-                        <Link href="/responsibility" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Социальная ответственность</Link>
-                        <Link href="/partners" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Партнеры</Link>
-                        <Link href="/video-gallery" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Видеогалерея</Link>
-                        <Link href="/representatives" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Представительства</Link>
-                        <Link href="/vacancies" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Вакансии</Link>
-                        <Link href="/sustainability" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Устойчивое развитие</Link>
+                        <Link href="/company/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link>
+                        <Link href="/company/social-responsibility" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Социальная ответственность</Link>
+                        <Link href="/company/partners" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Партнеры</Link>
+                        {/* <Link href="/video-gallery" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Видеогалерея</Link> */}
+                        <Link href="/company/representative" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Представительства</Link>
+                        {/* <Link href="/vacancies" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Вакансии</Link> */}
+                        <Link href="/company/sustainability" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Устойчивое развитие</Link>
                     </div>
                 </div>
                 {grandCategory.map(headerTab => (

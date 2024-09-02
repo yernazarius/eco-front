@@ -14,6 +14,12 @@ const nextConfig = {
 				port: '',
 				pathname: '/s3/static/**',
 			},
+			{
+				protocol: 'https',
+				hostname: 'www.ecoinstrument.ru',
+				port: '',
+				pathname: '/upload/**',
+			},
 		],
 	},
 }
