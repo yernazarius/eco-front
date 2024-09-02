@@ -1,4 +1,5 @@
 import VerticalSliderMenu from '@/components/VerticalSliderMenu'
+import { PropsWithChildren } from 'react'
 
 
 const menuItems = [
@@ -11,13 +12,13 @@ const menuItems = [
     { href: '/services/online-industrial-solutions', label: 'Промышленные решения ON-LINE' },
 ]
 
-const MyPage = () => {
+export default function Layout({ children }: PropsWithChildren<unknown>) {
     return (
-        <div>
+        <div className="container mx-auto mt-10 flex flex-col md:flex-row">
             <VerticalSliderMenu items={menuItems} />
-            {/* Other content */}
+            {children}
         </div>
     )
 }
 
-export default MyPage
+

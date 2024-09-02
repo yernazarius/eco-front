@@ -265,8 +265,20 @@ const Header = () => {
                     </div>
                 </div>
                 <Link href="/lab-equipment" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Лабораторное оборудование</Link>
-                <Link href="/projects" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Проекты</Link>
-                <Link href="/service-center" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Сервис центр</Link>
+                <div className="relative group">
+                    <div
+                        className="text-gray-700  hover:bg-primary_blue hover:text-white px-3 py-3"
+                    >
+                        Проекты
+                    </div>
+                    <div
+                        className="absolute hidden group-hover:block z-20 left-0  w-48 bg-white border rounded shadow-lg"
+                    >
+
+                        <Link href="/projects/lab-projects" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Лабораторное проекты</Link>
+                        <Link href="/projects" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Промышленные проекты</Link>
+                    </div>
+                </div>                <Link href="/service-center" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Сервис центр</Link>
                 <Link href="/promotions" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Акции</Link>
                 <Link href="/news" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Новости</Link>
                 <Link href="/contacts" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Контакты</Link>
