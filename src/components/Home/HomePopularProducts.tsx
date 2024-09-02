@@ -64,9 +64,9 @@ export default function HomePageProducts() {
                                 height={300}
                                 src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
-                                className="w-full h-40 object-cover rounded mb-4"
+                                className="w-full rounded mb-4"
                             />
-                            <h3 className="text-lg font-bold mb-2 h-12">{product.title}</h3>
+                            <h3 className="text-lg font-bold mb-2 ">{product.title}</h3>
                             <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 mx-4 mt-auto">Подробнее</button>
                         </div>
                     </Link>
