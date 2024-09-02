@@ -36,7 +36,7 @@ const BlogsPage = () => {
     }
 
     return <>
-        <div className="container mx-auto px-20 mt-12">
+        <div className="container mx-auto  mt-12">
             <h1 className="text-center text-3xl font-bold text-gray-800 mb-10">
                 Новости
             </h1>

@@ -13,7 +13,7 @@ export default function Layout({ children }: PropsWithChildren<unknown>) {
         { href: '/services/online-industrial-solutions', label: 'Промышленные решения ON-LINE' },
     ]
     return (
-        <div className="container mx-auto px-20 mt-10 flex flex-col md:flex-row">
+        <div className="container mx-auto  mt-10 flex flex-col md:flex-row">
             <VerticalSliderMenu items={menuItems} />
             {children}
         </div>

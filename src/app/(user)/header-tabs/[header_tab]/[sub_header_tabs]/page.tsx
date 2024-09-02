@@ -83,7 +83,7 @@ export default function Page({ params }: { params: { header_tab: string; sub_hea
 	}, [params.header_tab, params.sub_header_tabs])
 
 	return (
-		<div className="container mx-auto px-20 mt-10">
+		<div className="container mx-auto  mt-10">
 			<div className="text-sm text-gray-500 my-4">
 				<Link href="/"><span>Главная</span></Link> | <Link href={`/header/${headerTab?.name}`}><span>{headerTab?.name}</span></Link> | <span>{subHeaderTab?.name}</span>
 			</div>

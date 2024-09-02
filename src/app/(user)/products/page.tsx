@@ -196,7 +196,7 @@ function ProductsPageContent() {
     }
 
     return (
-        <div className="container mx-auto px-20 mt-12">
+        <div className="container mx-auto  mt-12">
             <div className="container mx-auto px-4 flex">
                 <aside className="w-1/4 pr-8">
                     <h2 className="text-2xl font-bold mb-4 text-gray-800">Категории</h2>

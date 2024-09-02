@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from "next"
+import Link from "next/link"
 
 export const metadata: Metadata = {
     title: 'Услуги',
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
     return (
-        <div className="container mx-auto px-20 mt-10">
+        <div className="container mx-auto  mt-10">
             <div className="text-sm text-gray-500 my-4">
                 <Link href="/"><span>Главная</span></Link>  | <span>Услуги</span>
             </div>

@@ -108,7 +108,7 @@ const Header = () => {
     }
 
     return (
-        <header className="container mx-auto px-20">
+        <header className="container mx-auto ">
             <div className="flex justify-between items-center p-4 bg-gray-100">
                 <a href="#" className="mr-6 text-blue-500 underline">Заказать звонок</a>
                 <div className='flex justify-between w-1/4'>
@@ -166,16 +166,15 @@ const Header = () => {
                 </div>
             </div>
 
-            <nav className="flex justify-around items-center py-2 border-y relative">
+            <nav className="flex justify-around items-center border-y relative m-0 p-0">
                 <div className="relative group">
-                    <a
-                        href="#"
-                        className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md"
+                    <div
+                        className="text-gray-700  hover:bg-primary_blue hover:text-white px-3 py-3"
                     >
                         Компания
-                    </a>
+                    </div>
                     <div
-                        className="absolute hidden group-hover:block z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg"
+                        className="absolute hidden group-hover:block z-20 left-0  w-48 bg-white border rounded shadow-lg"
                     >
                         <Link href="/company/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
 
@@ -192,7 +191,7 @@ const Header = () => {
                     <div key={headerTab.id} className=" group">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
-                            className={`px-3 py-2 rounded-md ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-blue-600'}`}
+                            className={`px-3 py-2  ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-primary_blue'}`}
                         >
                             {headerTab.name}
                         </button>
@@ -252,26 +251,25 @@ const Header = () => {
                     </div>
                 ))}
                 <div className="relative group">
-                    <a
-                        href="#"
-                        className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md"
+                    <div
+                        className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 "
                     >
                         Промышленный анализ
-                    </a>
+                    </div>
                     <div
-                        className="absolute hidden group-hover:block z-20 left-0 mt-2 w-48 bg-white border rounded shadow-lg"
+                        className="absolute hidden group-hover:block z-20 left-0 w-48 bg-white border rounded shadow-lg"
                     >
                         <Link href="/industrial/analysis1" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 1</Link>
                         <Link href="/industrial/analysis2" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 2</Link>
                         <Link href="/industrial/analysis3" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 3</Link>
                     </div>
                 </div>
-                <Link href="/lab-equipment" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Лабораторное оборудование</Link>
-                <Link href="/projects" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Проекты</Link>
-                <Link href="/service-center" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Сервис центр</Link>
-                <Link href="/promotions" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Акции</Link>
-                <Link href="/news" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Новости</Link>
-                <Link href="/contacts" className="text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md">Контакты</Link>
+                <Link href="/lab-equipment" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Лабораторное оборудование</Link>
+                <Link href="/projects" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Проекты</Link>
+                <Link href="/service-center" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Сервис центр</Link>
+                <Link href="/promotions" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Акции</Link>
+                <Link href="/news" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Новости</Link>
+                <Link href="/contacts" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Контакты</Link>
 
 
             </nav>

@@ -53,7 +53,7 @@ const BlogPage = () => {
 
     return (
         <>
-            <div className="container mx-auto py-10 px-20">
+            <div className="container mx-auto py-10 ">
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                     <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
                     <div className="flex items-center text-gray-600 text-sm mb-4">

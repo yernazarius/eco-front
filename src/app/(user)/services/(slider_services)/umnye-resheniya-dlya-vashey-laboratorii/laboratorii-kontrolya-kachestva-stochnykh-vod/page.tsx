@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from "next"
+import Link from "next/link"
 
 export const metadata: Metadata = {
     title: 'Услуги',
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function Servives_Laboratorii_Lontrolya_Page() {
     return (
-        <div className="container mx-auto px-20 mt-10">
+        <div className="container mx-auto  mt-10">
             <div className="text-sm text-gray-500 my-4">
                 <Link href="/"><span>Главная</span></Link>  | <Link href="/services"><span>Услуги</span></Link> | <Link href="/services/umnye-resheniya-dlya-vashey-laboratorii"><span>Умные решения для вашей лаборатории</span></Link> | <span>Лаборатории контроля сточных вод</span>
             </div>

@@ -76,7 +76,7 @@ const ProductPage = () => {
 
     return (
         <>
-            <div className="container mx-auto px-20 mt-12">
+            <div className="container mx-auto  mt-12">
                 <div className="flex flex-col md:flex-row items-center md:items-start">
                     <div className="md:w-1/2 w-full">
                         <ImageSlider thumbnail={product.thumbnail} images={product.images} />
