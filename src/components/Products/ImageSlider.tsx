@@ -17,10 +17,10 @@ const ImageSlider = ({ thumbnail, images }: ImageSliderProps) => {
     const allImages = [thumbnail, ...images]
 
     return (
-        <div ref={sliderRef} className="keen-slider h-[34rem]	">
+        <div ref={sliderRef} className="keen-slider h-full	">
             {allImages.map((src, index) => (
-                <div key={index} className="keen-slider__slide number-slide">
-                    <Image width={900} height={900} className="h-full flex self-center object-cover mx-auto" src={`${process.env.NEXT_PUBLIC_S3_URL}${src}`} alt={`Product Image ${index + 1}`} />
+                <div key={index} className="keen-slider__slide my-auto number-slide">
+                    <Image width={900} height={900} className="my-auto" src={`${process.env.NEXT_PUBLIC_S3_URL}${src}`} alt={`Product Image ${index + 1}`} />
                 </div>
             ))}
         </div>

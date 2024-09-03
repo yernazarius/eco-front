@@ -5,6 +5,7 @@ import { AxiosDefault } from '@/api/interceptors'
 import Header from '@/components/Header'
 import ImageSlider from '@/components/Products/ImageSlider'
 import Link from 'next/link'
+import PopularProductsCarousel from '@/components/Home/HomePopularProducts'
 
 
 interface Product {
@@ -82,16 +83,21 @@ const ProductPage = () => {
                         <ImageSlider thumbnail={product.thumbnail} images={product.images} />
                     </div>
                     <div className="md:w-1/2 w-full md:pl-8 mt-8 md:mt-0">
-                        <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
-                        <p className="text-gray-700 mb-4">{product.description}</p>
-                        <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>
+                        <h1 className="text-4xl font-semibold mb-4">{product.title}</h1>
+                        {/* <p className="text-gray-700 mb-4">{product.description}</p> */}
+                        {/* <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p> */}
                         <p className="text-gray-600 mb-2">В наличии: {product.brand.name}</p>
                         {/* <p className="text-gray-600 mb-2">Бренд: {product.brand}</p> */}
                         <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
                         {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
-                        <Link href="tel:+77075246868" className="px-4 py-2 bg-blue-500 text-white rounded">Задать вопрос</Link>
+                        <div className='mt-12'>
+                            <Link href="tel:+77075246868" className="px-6 py-3 border border-primary_blue text-black rounded-sm hover:bg-primary_blue hover:text-white">Задать вопрос</Link>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div className='my-6'>
+                <PopularProductsCarousel />
             </div>
         </>
     )

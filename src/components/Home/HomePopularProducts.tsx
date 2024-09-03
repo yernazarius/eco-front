@@ -1,8 +1,10 @@
 "use client"
-import { AxiosDefault } from '@/api/interceptors'
-import Image from 'next/image'
+import "keen-slider/keen-slider.min.css"
+import { useKeenSlider } from "keen-slider/react"
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { AxiosDefault } from '@/api/interceptors'
 
 interface Product {
     id: number
@@ -21,7 +23,7 @@ interface Product {
     recomended: boolean
 }
 
-export default function HomePageProducts() {
+const PopularProductsCarousel = () => {
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -29,7 +31,6 @@ export default function HomePageProducts() {
         const fetchProducts = async () => {
             try {
                 const response = await AxiosDefault.get('/products/?page=1&limit=100')
-                console.log('Products:', response.data)
                 setProducts(response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке продуктов:', error)
@@ -41,6 +42,31 @@ export default function HomePageProducts() {
         fetchProducts()
     }, [])
 
+    // Filter only favourite products
+    const favouriteProducts = products.filter(product => product.favourite)
+
+    const [sliderRef] = useKeenSlider<HTMLDivElement>({
+        loop: true,
+        slides: {
+            perView: 3,
+            spacing: 15,
+        },
+        breakpoints: {
+            "(max-width: 768px)": {
+                slides: {
+                    perView: 1,
+                    spacing: 10,
+                },
+            },
+            "(max-width: 1200px)": {
+                slides: {
+                    perView: 2,
+                    spacing: 10,
+                },
+            },
+        },
+    })
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -49,16 +75,13 @@ export default function HomePageProducts() {
         )
     }
 
-    // Filter only favourite products
-    const favouriteProducts = products.filter(product => product.favourite)
-
     return (
         <div className="container mx-auto px-40 mt-12">
             <h2 className="text-3xl font-semibold mb-4 text-gray-800 text-center w-full">Популярные товары</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div ref={sliderRef} className="keen-slider">
                 {favouriteProducts.map(product => (
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
-                        <div className="bg-white p-4 cursor-pointer flex flex-col justify-center text-center h-full">
+                        <div className="keen-slider__slide bg-white p-4 cursor-pointer flex flex-col justify-center text-center h-full">
                             <Image
                                 width={300}
                                 height={300}
@@ -66,7 +89,7 @@ export default function HomePageProducts() {
                                 alt={product.title}
                                 className="w-full rounded mb-4"
                             />
-                            <h3 className="text-lg font-bold mb-2 ">{product.title}</h3>
+                            <h3 className="text-md font-bold mb-2">{product.title}</h3>
                             <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 mx-4 mt-auto">Подробнее</button>
                         </div>
                     </Link>
@@ -80,3 +103,5 @@ export default function HomePageProducts() {
         </div>
     )
 }
+
+export default PopularProductsCarousel
