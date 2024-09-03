@@ -1,8 +1,8 @@
 "use client"
 import { AxiosDefault } from '@/api/interceptors'
-import ImageSlider from '@/components/ImageSlider'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import ImageSlider from './ImageSlider'
 
 interface Product {
 	id: number
