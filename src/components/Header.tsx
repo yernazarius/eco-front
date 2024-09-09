@@ -251,20 +251,20 @@ const Header = () => {
                     </div>
                 ))}
                 <div className="relative group">
-                    <div
+                    <Link href='/products'
                         className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 "
                     >
                         Промышленный анализ
-                    </div>
-                    <div
+                    </Link>
+                    {/* <div
                         className="absolute hidden group-hover:block z-20 left-0 w-48 bg-white border rounded shadow-lg"
                     >
                         <Link href="/industrial/analysis1" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 1</Link>
                         <Link href="/industrial/analysis2" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 2</Link>
                         <Link href="/industrial/analysis3" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 3</Link>
-                    </div>
+                    </div> */}
                 </div>
-                <Link href="/lab-equipment" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Лабораторное оборудование</Link>
+                <Link href="/products" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Лабораторное оборудование</Link>
                 <div className="relative group">
                     <div
                         className="text-gray-700  hover:bg-primary_blue hover:text-white px-3 py-3"
@@ -279,7 +279,7 @@ const Header = () => {
                         <Link href="/projects" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Промышленные проекты</Link>
                     </div>
                 </div>                <Link href="/services/servisnoe-obsluzhivanie-vashikh-priborov" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Сервис центр</Link>
-                <Link href="/promotions" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Акции</Link>
+                <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Акции</Link>
                 <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Новости</Link>
                 <Link href="/contacts" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Контакты</Link>
 
