@@ -1,5 +1,6 @@
 "use client"
 import { AxiosDefault, axiosWithAuth } from '@/api/interceptors'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 
@@ -64,7 +65,7 @@ const AdminDeleteBlogPage = () => {
                 <div className="space-y-6">
                     {blogs.map(blog => (
                         <div key={blog.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-                            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                            <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                             <p className="text-lg font-semibold text-gray-800">{blog.title}</p>
                             <button
                                 onClick={() => handleDelete(blog.id)}
