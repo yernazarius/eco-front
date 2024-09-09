@@ -60,6 +60,7 @@ export default function CreateBlogPage() {
             }
 
             // Submit blog data
+            console.log('formData', ...formData)
             await axiosWithAuth.post('/blogs/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
