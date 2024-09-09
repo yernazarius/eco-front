@@ -1,48 +1,78 @@
-"use client";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { axiosWithAuth } from '@/api/interceptors';
+"use client"
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid'
+import { axiosWithAuth, AxiosS3 } from '@/api/interceptors'
 
 export default function CreateBlogPage() {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [file, setFile] = useState<File | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
-    const router = useRouter();
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    const [file, setFile] = useState<File | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
+    const router = useRouter()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFile(e.target.files[0]);
+            setFile(e.target.files[0])
         }
-    };
+    }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setError('');
+    // Function to upload file to S3
+    const uploadFileToS3 = async (file: File, dir: string) => {
+        const uuidv4Name = uuidv4()
+        const fileExtension = file.name.split('.').pop()
+        const newFileName = `${dir}/${uuidv4Name}.${fileExtension}`
+        const renamedFile = new File([file], newFileName, { type: file.type })
+
+        const formDataForUpload = new FormData()
+        formDataForUpload.append('file', renamedFile)
 
         try {
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('text', content);
+            const s3Response = await AxiosS3.post(`upload?dir=${dir}&name_of_file=${uuidv4Name}.${fileExtension}`, formDataForUpload)
+            if (s3Response.status !== 200) {
+                throw new Error('Failed to upload file to S3')
+            }
+            return s3Response.data.file_path || newFileName
+        } catch (error) {
+            throw new Error('Error uploading file to S3')
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsLoading(true)
+        setError('')
+
+        try {
+            let imagePath = ''
+            // If file is selected, upload it to S3
             if (file) {
-                formData.append('image', file);
+                imagePath = await uploadFileToS3(file, 'blogs')
             }
 
+            // Prepare the form data
+            const formData = new FormData()
+            formData.append('title', title)
+            formData.append('text', content)
+            if (imagePath) {
+                formData.append('image', imagePath)
+            }
+
+            // Submit blog data
             await axiosWithAuth.post('/blogs/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-            });
-            router.push('/admin');
+            })
+            router.push('/admin')
         } catch (err) {
-            setError('Ошибка при создании блога');
-            console.error(err);
+            setError('Ошибка при создании блога')
+            console.error(err)
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
-    };
+    }
 
     return (
         <div className="container mx-auto py-10">
@@ -98,5 +128,5 @@ export default function CreateBlogPage() {
                 {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
             </form>
         </div>
-    );
+    )
 }
