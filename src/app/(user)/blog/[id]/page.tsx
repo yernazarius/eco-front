@@ -1,5 +1,6 @@
 "use client"
 import { AxiosDefault } from '@/api/interceptors'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -70,7 +71,7 @@ const BlogPage = () => {
                             <i className="far fa-clock"></i> Время чтения: 2 минуты
                         </div>
                     </div>
-                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
+                    <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-full h-96 object-cover mb-4 rounded" />
                     <p className="text-gray-700 mb-6">{blog.text}</p>
                 </div>
                 <div className="mt-10">
