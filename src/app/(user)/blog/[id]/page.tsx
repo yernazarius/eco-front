@@ -71,7 +71,7 @@ const BlogPage = () => {
                             <i className="far fa-clock"></i> Время чтения: 2 минуты
                         </div>
                     </div>
-                    <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-full h-96  mb-4 rounded" />
+                    <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-full h-auto  mb-4 rounded" />
                     <p className="text-gray-700 mb-6">{blog.text}</p>
                 </div>
                 <div className="mt-10">
