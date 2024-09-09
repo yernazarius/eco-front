@@ -19,9 +19,9 @@ export default function HistoryPage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex flex-row justify-between space-x-4">
 					{[
-						{ src: '/company/almaty.jpg', alt: 'almaty office', title: 'Экоинструмент - Алматы' },
-						{ src: '/company/ural.jpg', alt: 'ural office', title: 'Экоинструмент - Урал' },
-						{ src: '/company/volga.jpeg', alt: 'volga office', title: 'Экоинструмент - Волга' },
+						{ src: '/company/almaty.jpg', alt: 'almaty office', title: 'Экоинструмен - Алматы - Алматы' },
+						{ src: '/company/ural.jpg', alt: 'ural office', title: 'Экоинструмен - Алматы - Урал' },
+						{ src: '/company/volga.jpeg', alt: 'volga office', title: 'Экоинструмен - Алматы - Волга' },
 					].map((office, index) => (
 						<div key={index} className='border w-[30%] flex flex-col'>
 							<div className='flex flex-col p-3 h-full'>

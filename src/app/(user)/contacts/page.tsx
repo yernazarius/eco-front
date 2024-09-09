@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from "next"
+import Link from "next/link"
 
 export const metadata: Metadata = {
     title: 'Услуги',
@@ -14,7 +14,7 @@ export default function ContactsPage() {
             <h1 className="text-4xl font-medium mb-6">Контактная информация</h1>
             <div className="">
                 <div>
-                    <h1 className="text-lg font-medium">ТОО «Экоинструмент»</h1>
+                    <h1 className="text-lg font-medium">ТОО «Экоинструмен - Алматы»</h1>
                     <div className="flex flex-col mt-5 gap-5 w-full">
                         <div className="flex flex-row gap-10 w-full">
                             <p className="w-1/4">Адрес:	</p>
