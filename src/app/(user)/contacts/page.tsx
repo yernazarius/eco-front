@@ -14,7 +14,7 @@ export default function ContactsPage() {
             <h1 className="text-4xl font-medium mb-6">Контактная информация</h1>
             <div className="">
                 <div>
-                    <h1 className="text-lg font-medium">ТОО «Экоинструмен - Алматы»</h1>
+                    <h1 className="text-lg font-medium">ТОО «Экоинструмент - Алматы»</h1>
                     <div className="flex flex-col mt-5 gap-5 w-full">
                         <div className="flex flex-row gap-10 w-full">
                             <p className="w-1/4">Адрес:	</p>
@@ -44,7 +44,7 @@ export default function ContactsPage() {
                     <div>
                         <h4 className="text-3xl font-medium mt-10 mb-4">Уважаемые клиенты!</h4>
                         <p>О своем визите информируйте, пожалуйста, заранее. Для выписки отгрузочных документов, передачи их на склад требуется время.</p>
-                        <p>Заявки на выдачу товаров на завтрашний день принимаются до 16:00 московского времени. Заявки, присланные после этого времени могут быть отгружены только через сутки.</p>
+                        <p>Заявки на выдачу товаров на завтрашний день принимаются до 16:00 астанинскому времени. Заявки, присланные после этого времени могут быть отгружены только через сутки.</p>
                     </div>
 
                 </div>

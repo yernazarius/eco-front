@@ -19,14 +19,12 @@ export default function MetrologicalSupportPage() {
 
 			{/* Main Content */}
 			<div className="flex flex-col lg:flex-row justify-between gap-8">
-				<div className="lg:w-1/2">
-					<Image src="/services/servisnoe/img_2.png" alt="Метрологическая и методическая поддержка" title="Метрологическая и методическая поддержка" width={450} height={317} className="w-full h-auto rounded" />
-				</div>
+
 				<div className="lg:w-1/2">
 					<p className="mb-4 text-gray-700">Мы предлагаем услуги по первичной и периодической поверке приобретенных вами приборов.</p>
 					<p className="mb-4 text-gray-700">
 						<strong>Заявки направлять на почту:&nbsp;</strong>
-						<a href="mailto:metrology@ecoinstrument.ru" className="text-primary_blue font-semibold">metrology@ecoinstrument.ru</a>
+						<a href="mailto:service@ecoinstrument.kz" className="text-primary_blue font-semibold">service@ecoinstrument.kz</a>
 					</p>
 					<Link href="#more-info" className="text-primary_blue font-semibold">
 						Подробнее
@@ -47,7 +45,7 @@ export default function MetrologicalSupportPage() {
 						Обязательной поверке должны подвергаться СИ, которые применяются в сфере Государственного регулирования обеспечения единства измерений.
 					</p>
 					<p className="mb-6 text-gray-700">
-						На большинство наших приборов получено свидетельство об утверждении типа СИ, поскольку Экоинструмен - Алматы является официальным представителем производителей в России.
+						На большинство наших приборов получено свидетельство об утверждении типа СИ, поскольку «Экоинструмент - Алматы» является официальным представителем производителей в Казахстане.
 					</p>
 					<p className="mb-6 text-gray-700">
 						Мы предлагаем услуги по первичной и периодической поверке приобретенных вами приборов. Мы сотрудничаем только с проверенными годами заведениями, поэтому гарантируем, что поверка производится в соответствии с государственной поверочной схемой и методикой поверки, установленной при утверждении типа средств измерений.

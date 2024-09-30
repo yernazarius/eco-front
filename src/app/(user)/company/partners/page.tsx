@@ -235,7 +235,7 @@ export default function HistoryPage() {
 				<Link href="/"><span>Главная</span></Link> | <Link href="/services"><span>О комании</span></Link> | <Link href="/services"><span>Партнеры</span></Link>
 			</div>
 			<h1 className="text-4xl font-medium mb-6">Партнеры</h1>
-			<p className='text-primary_text'>ООО &quot;Экоинструмен - Алматы&quot; всегда было ориентировано на качественные и надежные приборы, показаниям которых можно доверять даже при проведении измерений в экстремальных условиях. Именно наша компания вывела на российский рынок такие известные мировые марки, как HANNA Instruments, HACH-Lange, WTW, Eijkelkamp, KERN, Haws, GSSI и другие.
+			<p className='text-primary_text'>ООО &quot;«Экоинструмент - Алматы»&quot; всегда было ориентировано на качественные и надежные приборы, показаниям которых можно доверять даже при проведении измерений в экстремальных условиях. Именно наша компания вывела на российский рынок такие известные мировые марки, как HANNA Instruments, HACH-Lange, WTW, Eijkelkamp, KERN, Haws, GSSI и другие.
 			</p>
 			<div className="container mx-auto px-4 py-8">
 				<div className="grid grid-cols-12 gap-4">

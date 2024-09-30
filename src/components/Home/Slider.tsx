@@ -1,32 +1,38 @@
-"use client";
-import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+"use client"
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6"
 
 
-import React, { useState, useEffect } from "react";
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
-import Image from 'next/image';
+import React, { useState, useEffect } from "react"
+import { useKeenSlider } from "keen-slider/react"
+import "keen-slider/keen-slider.min.css"
+import Image from 'next/image'
+import Link from 'next/link'
 
 const slides = [
     {
         image: '/home_images/slider/sliderImage.png',
         title: 'Лабораторный анализ',
         description: 'Измерительные приборы, реагенты и общее лабораторное оборудование от ведущих производителей',
+        link: '/products',
     },
     {
         image: '/home_images/slider/sliderImage2.png',
         title: 'Лабораторный анализ',
         description: 'Измерительные приборы, реагенты и общее лабораторное оборудование от ведущих производителей',
+        link: '/products',
+
     },
     {
         image: '/home_images/slider/sliderImage3.png',
         title: 'Лабораторный анализ',
         description: 'Измерительные приборы, реагенты и общее лабораторное оборудование от ведущих производителей',
+        link: '/products',
+
     },
-];
+]
 
 const HomeSlider: React.FC = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0)
     const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
         {
             loop: true,
@@ -37,38 +43,38 @@ const HomeSlider: React.FC = () => {
         },
         [
             (slider) => {
-                let timeout: ReturnType<typeof setTimeout>;
-                let mouseOver = false;
+                let timeout: ReturnType<typeof setTimeout>
+                let mouseOver = false
                 function clearNextTimeout() {
-                    clearTimeout(timeout);
+                    clearTimeout(timeout)
                 }
                 function nextTimeout() {
-                    clearTimeout(timeout);
-                    if (mouseOver) return;
+                    clearTimeout(timeout)
+                    if (mouseOver) return
                     timeout = setTimeout(() => {
-                        slider.next();
-                    }, 2000);
+                        slider.next()
+                    }, 2000)
                 }
                 slider.on("created", () => {
                     slider.container.addEventListener("mouseover", () => {
-                        mouseOver = true;
-                        clearNextTimeout();
-                    });
+                        mouseOver = true
+                        clearNextTimeout()
+                    })
                     slider.container.addEventListener("mouseout", () => {
-                        mouseOver = false;
-                        nextTimeout();
-                    });
-                    nextTimeout();
-                });
-                slider.on("dragStarted", clearNextTimeout);
-                slider.on("animationEnded", nextTimeout);
-                slider.on("updated", nextTimeout);
+                        mouseOver = false
+                        nextTimeout()
+                    })
+                    nextTimeout()
+                })
+                slider.on("dragStarted", clearNextTimeout)
+                slider.on("animationEnded", nextTimeout)
+                slider.on("updated", nextTimeout)
                 slider.on("slideChanged", () => {
-                    setCurrentSlide(slider.track.details.rel);
-                });
+                    setCurrentSlide(slider.track.details.rel)
+                })
             },
         ]
-    );
+    )
 
     return (
         <div className="relative">
@@ -79,9 +85,9 @@ const HomeSlider: React.FC = () => {
                         <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col pl-40 items-baseline justify-center text-white p-4">
                             <h2 className="text-3xl font-bold">{slide.title}</h2>
                             <p className="text-xl mt-4">{slide.description}</p>
-                            <button className="mt-6 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">
+                            <Link href={slide.link} className="mt-6 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">
                                 Перейти в каталог
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ))}
@@ -106,7 +112,7 @@ const HomeSlider: React.FC = () => {
                 ))}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default HomeSlider;
+export default HomeSlider

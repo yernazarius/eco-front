@@ -23,6 +23,7 @@ interface ChildCategory {
 }
 
 const Header = () => {
+    const [isDropdownHovered, setIsDropdownHovered] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [searchResults, setSearchResults] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
@@ -94,6 +95,7 @@ const Header = () => {
         }
     }
 
+
     const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value)
         if (event.target.value.trim() === '') {
@@ -107,12 +109,13 @@ const Header = () => {
         setSearchQuery('')
     }
 
+
     return (
         <header className="container mx-auto ">
             <div className="flex justify-between items-center p-4 bg-gray-100">
                 <a href="#" className="mr-6 text-blue-500 underline">Заказать звонок</a>
                 <div className='flex justify-between w-1/4'>
-                    <a href="#" className="text-red-500">Проезд на склад</a>
+                    <a href="tel:+74957452290" className="text-red-500">Проезд на склад</a>
                     <a href="#" className="text-gray-500">RU</a>
                     <a href="#" className="text-gray-500">EN</a>
                 </div>
@@ -132,20 +135,28 @@ const Header = () => {
                             className="px-4 py-2 border rounded-md"
                         />
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Search</button>
+
+                        {/* Dropdown */}
                         {showDropdown && (
-                            <div className="absolute top-12 left-0 mt-2 w-full bg-white border rounded shadow-lg z-10">
+                            <div
+                                className="absolute top-12 left-0 mt-2 w-full bg-white border rounded shadow-lg z-10"
+                                onMouseEnter={() => setIsDropdownHovered(true)}
+                                onMouseLeave={() => setIsDropdownHovered(false)}
+                            >
                                 {searchResults.length > 0 ? (
                                     searchResults.map((result: any) => (
                                         <Link href={`/products/${result.id}`} key={result.id} passHref>
                                             <div className='flex flex-row justify-between p-1'>
                                                 <div
-                                                    className="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                                    className="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer truncate"
                                                     onClick={handleResultClick}
+                                                    style={{ maxHeight: '2.5rem', overflow: 'hidden' }} // Max height with truncation
                                                 >
                                                     {result.title}
                                                 </div>
-                                                <img
-                                                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/${result.thumbnail}`}
+                                                <Image
+                                                    width={100} height={100}
+                                                    src={`${process.env.NEXT_PUBLIC_S3_URL}/${result.thumbnail}`}
                                                     alt={result.title}
                                                     className="w-[20%] h-auto"
                                                 />
@@ -178,11 +189,11 @@ const Header = () => {
                     >
                         <Link href="/company/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
 
-                        <Link href="/company/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link>
-                        <Link href="/company/social-responsibility" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Социальная ответственность</Link>
+                        {/* <Link href="/company/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link> */}
+                        {/* <Link href="/company/social-responsibility" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Социальная ответственность</Link> */}
                         <Link href="/company/partners" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Партнеры</Link>
                         {/* <Link href="/video-gallery" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Видеогалерея</Link> */}
-                        <Link href="/company/representative" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Представительства</Link>
+                        {/* <Link href="/company/representative" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Представительства</Link> */}
                         {/* <Link href="/vacancies" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Вакансии</Link> */}
                         <Link href="/company/sustainability" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Устойчивое развитие</Link>
                     </div>
