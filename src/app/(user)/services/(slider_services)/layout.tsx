@@ -15,7 +15,7 @@ const menuItems = [
 export default function Layout({ children }: PropsWithChildren<unknown>) {
     return (
         <div className="container mx-auto mt-10 flex flex-col md:flex-row">
-            <VerticalSliderMenu items={menuItems} />
+            {/* <VerticalSliderMenu items={menuItems} /> */}
             {children}
         </div>
     )
