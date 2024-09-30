@@ -115,7 +115,7 @@ const Header = () => {
             <div className="flex justify-between items-center p-4 bg-gray-100">
                 <a href="#" className="mr-6 text-blue-500 underline">Заказать звонок</a>
                 <div className='flex justify-between w-1/4'>
-                    <a href="tel:+74957452290" className="text-red-500">Проезд на склад</a>
+                    <Link href='/contacts' className="text-red-500">Проезд на склад</Link>
                     <a href="#" className="text-gray-500">RU</a>
                     <a href="#" className="text-gray-500">EN</a>
                 </div>

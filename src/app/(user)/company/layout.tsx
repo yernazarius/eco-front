@@ -7,10 +7,8 @@ export default function Layout({ children }: PropsWithChildren<unknown>) {
 
 	const menuItems = [
 		{ href: '/company/', label: 'О компании' },
-		{ href: '/company/history', label: 'История' },
-		{ href: '/company/social-responsibility', label: 'Социальная ответственность' },
 		{ href: '/company/partners', label: 'Партнеры' },
-		{ href: '/company/representative', label: 'Представительства' },
+
 		// { href: '/company/service-maintenance', label: 'Видеогалерея' },
 		// { href: '/company/online-industrial-solutions', label: 'Вакансии' },
 		{ href: '/company/sustainability', label: 'Устойчивое развитие' },
