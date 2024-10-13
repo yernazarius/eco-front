@@ -2,11 +2,9 @@
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { AxiosDefault } from '@/api/interceptors'
-import Header from '@/components/Header'
 import ImageSlider from '@/components/Products/ImageSlider'
 import Link from 'next/link'
 import PopularProductsCarousel from '@/components/Home/HomePopularProducts'
-
 
 interface Product {
     id: number
@@ -77,26 +75,25 @@ const ProductPage = () => {
 
     return (
         <>
-            <div className="container mx-auto  mt-12">
+            <div className="container mx-auto mt-8 md:mt-12 px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row items-center md:items-start">
-                    <div className="md:w-1/2 w-full">
+                    <div className="w-full md:w-1/2">
                         <ImageSlider thumbnail={product.thumbnail} images={product.images} />
                     </div>
-                    <div className="md:w-1/2 w-full md:pl-8 mt-8 md:mt-0">
-                        <h1 className="text-4xl font-semibold mb-4">{product.title}</h1>
-                        {/* <p className="text-gray-700 mb-4">{product.description}</p> */}
-                        {/* <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p> */}
+                    <div className="w-full md:w-1/2 md:pl-8 mt-8 md:mt-0">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">{product.title}</h1>
                         <p className="text-gray-600 mb-2">В наличии: {product.brand.name}</p>
-                        {/* <p className="text-gray-600 mb-2">Бренд: {product.brand}</p> */}
                         <p className="text-gray-600 mb-2">Категория: {product.child_category.name}</p>
-                        {/* <p className="text-gray-500 text-sm">Дата создания: {new Date(product.created_at).toLocaleDateString()}</p> */}
-                        <div className='mt-12'>
-                            <Link href="tel:+77075246868" className="px-6 py-3 border border-primary_blue text-black rounded-sm hover:bg-primary_blue hover:text-white">Задать вопрос</Link>
+                        <div className="mt-6">
+                            <Link href="tel:+77075246868" className="px-6 py-3 border border-primary_blue text-black rounded-sm hover:bg-primary_blue hover:text-white">
+                                Задать вопрос
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='my-6'>
+
+            <div className="my-6">
                 <PopularProductsCarousel />
             </div>
         </>

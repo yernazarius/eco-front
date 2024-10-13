@@ -71,10 +71,10 @@ const BlogPage = () => {
                             <i className="far fa-clock"></i> Время чтения: 2 минуты
                         </div>
                     </div>
-                    <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-1/2 h-auto mx-auto  mb-4 rounded" />
+                    <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${blog.image}`} alt={blog.title} className="w-1/2 h-auto mx-auto  mb-4 rounded" width={1000} height={1000} />
                     <p className="text-gray-700 mb-6">{blog.text}</p>
                 </div>
-                <div className="mt-10">
+                <div className="mt-10 px-4">
                     <h2 className="text-2xl font-bold mb-4">Последние новости</h2>
                     <ul className="list-disc list-inside">
                         {/* <li>

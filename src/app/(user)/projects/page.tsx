@@ -271,27 +271,36 @@ const projects = [
 
 export default function HistoryPage() {
 	return (
-		<div className="md:w-3/4 w-full">
+		<div className="w-full md:w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
+			{/* Breadcrumb */}
 			<div className="text-sm text-gray-500 my-4">
 				<Link href="/"><span>Главная</span></Link> | <Link href="/services"><span>Проекты</span></Link>
 			</div>
-			<h1 className="text-4xl font-medium mb-6">Проекты</h1>
-			<p className='text-primary_text'>
+
+			{/* Title */}
+			<h1 className="text-3xl sm:text-4xl font-medium mb-6">Проекты</h1>
+
+			{/* Description */}
+			<p className="text-primary_text mb-8">
 				За 30 лет работы наша компания накопила огромный опыт, как в полном оснащении производственных лабораторий, так и в реализации крупных промышленных проектов, таких как обеспечение бесперебойной работы оборудования в процессах водоподготовки и очистки сточных вод. В данном разделе вы можете ознакомиться с самыми масштабными реализованными проектами.
 			</p>
-			<div className="container mx-auto px-4 py-8">
-				<div className="flex flex-wrap gap-3 space-x-4">
+
+			{/* Project Cards */}
+			<div className="container mx-auto py-8">
+				<div className="flex flex-wrap justify-between gap-6">
 					{projects.map((project, index) => (
-						<Link href={project.link} key={index} className='border w-[30%] flex flex-col mb-6'>
-							<div className='flex flex-col h-full'>
+						<Link href={project.link} key={index} className="w-full md:w-[48%] lg:w-[30%] flex flex-col mb-6">
+							<div className="flex flex-col h-full border rounded-lg shadow-md hover:shadow-lg transition-shadow">
+								{/* Image */}
 								<div className="relative w-full h-48">
-									<Image src={project.src} layout="fill" objectFit="cover" className="rounded" alt={project.alt} />
+									<Image src={project.src} layout="fill" objectFit="cover" className="rounded-t-lg" alt={project.alt} />
 								</div>
-								<div className='px-2 pb-12'>
-									<h2 className='text-center font-medium mt-5'>{project.title}</h2>
-									<p className='text-primary_text text-center text-sm mt-2'>{project.desc}</p>
-									<div className='bg-primary_blue w-1/4 h-[.2rem] mx-auto mt-3 rounded-md'></div>
-									<p className='text-primary_text text-center text-sm mt-2'>{project.client}</p>
+								{/* Text Content */}
+								<div className="px-4 py-6 flex-grow">
+									<h2 className="text-lg font-medium text-center">{project.title}</h2>
+									<p className="text-primary_text text-center text-sm mt-2">{project.desc}</p>
+									<div className="bg-primary_blue w-1/4 h-1 mx-auto mt-3 rounded-md"></div>
+									<p className="text-primary_text text-center text-sm mt-2">{project.client}</p>
 								</div>
 							</div>
 						</Link>

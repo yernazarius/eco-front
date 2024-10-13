@@ -76,8 +76,8 @@ const PopularProductsCarousel = () => {
     }
 
     return (
-        <div className="container mx-auto px-40 mt-12">
-            <h2 className="text-3xl font-semibold mb-4 text-gray-800 text-center w-full">Популярные товары</h2>
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 mt-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-gray-800 text-center">Популярные товары</h2>
             <div ref={sliderRef} className="keen-slider">
                 {favouriteProducts.map(product => (
                     <Link key={product.id} href={`/products/${product.id}`} passHref>
@@ -87,17 +87,21 @@ const PopularProductsCarousel = () => {
                                 height={300}
                                 src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                 alt={product.title}
-                                className="w-full rounded mb-4"
+                                className="w-full h-auto object-contain rounded mb-4"
                             />
                             <h3 className="text-md font-bold mb-2">{product.title}</h3>
-                            <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 mx-4 mt-auto">Подробнее</button>
+                            <button className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 px-4 mt-auto">
+                                Подробнее
+                            </button>
                         </div>
                     </Link>
                 ))}
             </div>
             <div className="flex justify-center mt-8">
                 <Link href="/products">
-                    <div className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 px-4">Все товары</div>
+                    <div className="hover:bg-primary_blue hover:text-white border border-primary_blue text-black py-2 px-4">
+                        Все товары
+                    </div>
                 </Link>
             </div>
         </div>

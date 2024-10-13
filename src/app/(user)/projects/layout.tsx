@@ -11,8 +11,8 @@ export default function Layout({ children }: PropsWithChildren<unknown>) {
 
 
 	return (
-		<div className="container mx-auto mt-10 flex flex-col md:flex-row">
-			<div className='w-full md:w-1/4 p-3 mr-2'></div>
+		<div className="container mx-auto mt-10 flex flex-col md:flex-row px-4">
+			<div className=' w-full md:w-1/4 p-3 mr-2'></div>
 			{children}
 		</div>
 	)

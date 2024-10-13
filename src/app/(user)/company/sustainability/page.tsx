@@ -33,7 +33,7 @@ export default function AboutCompanyPage() {
 
 
 			</p>
-			<div className='flex flex-row gap-3 mt-12'>
+			<div className='flex flex-col lg:flex-row gap-3 mt-12'>
 				<Image src="/company/book_1.jpg" width={400} height={1000} alt='book 1' />
 				<Image src="/company/book_2.png" width={400} height={1000} alt='book 2' />
 			</div>

@@ -31,12 +31,13 @@ export default function ProjectPage() {
 			<h1 className="text-4xl font-medium mb-6">Оснащение завода напитков</h1>
 
 			<div className="mb-8">
-				<div className="relative w-full h-96 mb-4">
+				<div className="relative mb-4">
 					<Image
 						src="/projects/svyatoi_istichnik.jpg"
 						alt="Оснащение завода напитков"
-						fill
-						className="rounded"
+						width={1000}
+						height={1000}
+						className="rounded w-full"
 					/>
 				</div>
 			</div>

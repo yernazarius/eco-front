@@ -76,7 +76,6 @@ const Header = () => {
         setSelectedCategory(null)
     }
 
-
     const handleSearch = async (event: React.FormEvent) => {
         event.preventDefault()
         if (searchQuery.trim() === '') {
@@ -95,7 +94,6 @@ const Header = () => {
         }
     }
 
-
     const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value)
         if (event.target.value.trim() === '') {
@@ -109,22 +107,25 @@ const Header = () => {
         setSearchQuery('')
     }
 
-
     return (
-        <header className="container mx-auto ">
+        <header className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="flex justify-between items-center p-4 bg-gray-100">
-                <a href="#" className="mr-6 text-blue-500 underline">Заказать звонок</a>
-                <div className='flex justify-between w-1/4'>
+                <a href="#" className="mr-6 text-blue-500 underline text-sm sm:text-base">Заказать звонок</a>
+                <div className="flex justify-between w-1/2 md:w-1/4 text-sm sm:text-base">
                     <Link href='/contacts' className="text-red-500">Проезд на склад</Link>
                     <a href="#" className="text-gray-500">RU</a>
                     <a href="#" className="text-gray-500">EN</a>
                 </div>
             </div>
+            <Link href='/' className=" sm:hidden flex items-center justify-center py-5">
+                <Image width={180} height={36} src="/logo.png" alt="Logo" className=" w-3/4" />
+            </Link>
 
             <div className="flex justify-between items-center py-4">
-                <Link href='/' className="flex items-center">
-                    <Image width={280} height={56} src="/logo.png" alt="Logo" className="h-12 mr-4" />
+                <Link href='/' className="hidden sm:flex items-center">
+                    <Image width={180} height={36} src="/logo.png" alt="Logo" className="w-full h-8 sm:h-12 mr-2 sm:mr-4" />
                 </Link>
+
                 <div className="flex items-center space-x-4">
                     <form onSubmit={handleSearch} className="flex items-center relative">
                         <input
@@ -132,9 +133,9 @@ const Header = () => {
                             placeholder="Search by name..."
                             value={searchQuery}
                             onChange={handleSearchInput}
-                            className="px-4 py-2 border rounded-md"
+                            className="px-4 py-2 border rounded-md text-sm sm:text-base"
                         />
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Search</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Поиск</button>
 
                         {/* Dropdown */}
                         {showDropdown && (
@@ -150,7 +151,7 @@ const Header = () => {
                                                 <div
                                                     className="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer truncate"
                                                     onClick={handleResultClick}
-                                                    style={{ maxHeight: '2.5rem', overflow: 'hidden' }} // Max height with truncation
+                                                    style={{ maxHeight: '2.5rem', overflow: 'hidden' }}
                                                 >
                                                     {result.title}
                                                 </div>
@@ -169,50 +170,45 @@ const Header = () => {
                             </div>
                         )}
                     </form>
-                    <div className="flex items-baseline flex-col text-left justify-center ml-4">
+
+                    {/* Contact Info */}
+                    <div className="hidden sm:flex items-baseline flex-col text-left justify-center ml-4">
                         <a href="tel:+74957452290" className="text-gray-700">+7 (707) 524 68 68</a>
                         <a href="mailto:mail@ecoinstrument.ru" className="ml-2 text-blue-500">info@ecoinstrument.kz</a>
                     </div>
-                    <Link href="tel:+77075246868" className="px-4 py-2 bg-blue-500 text-white rounded">Задать вопрос</Link>
+                    <Link href="tel:+77075246868" className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded text-sm sm:text-base">
+                        Задать вопрос
+                    </Link>
                 </div>
             </div>
 
-            <nav className="flex justify-around items-center border-y relative m-0 p-0">
+            <nav className="flex flex-wrap justify-around items-center border-y relative m-0 p-2 md:p-0">
                 <div className="relative group">
-                    <div
-                        className="text-gray-700  hover:bg-primary_blue hover:text-white px-3 py-3"
-                    >
+                    <div className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">
                         Компания
                     </div>
-                    <div
-                        className="absolute hidden group-hover:block z-20 left-0  w-48 bg-white border rounded shadow-lg"
-                    >
+                    <div className="absolute hidden group-hover:block z-20 left-0 w-48 bg-white border rounded shadow-lg">
                         <Link href="/company/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">О компании</Link>
-
-                        {/* <Link href="/company/history" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">История</Link> */}
-                        {/* <Link href="/company/social-responsibility" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Социальная ответственность</Link> */}
                         <Link href="/company/partners" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Партнеры</Link>
-                        {/* <Link href="/video-gallery" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Видеогалерея</Link> */}
-                        {/* <Link href="/company/representative" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Представительства</Link> */}
-                        {/* <Link href="/vacancies" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Вакансии</Link> */}
                         <Link href="/company/sustainability" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Устойчивое развитие</Link>
                     </div>
                 </div>
+
                 {grandCategory.map(headerTab => (
-                    <div key={headerTab.id} className=" group">
+                    <div key={headerTab.id} className="relative group z-20 ">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
-                            className={`px-3 py-2  ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-primary_blue'}`}
+                            className={`px-2 py-2 sm:px-3 sm:py-3 ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-primary_blue'}`}
                         >
                             {headerTab.name}
                         </button>
                         {selectedCategory === headerTab.id && (
-                            <div className="absolute left-0 w-full bg-white shadow-lg z-20 mt-2">
-                                <div className="grid grid-cols-4 gap-4 p-4">
+                            <div className="absolute left-0 w-[8rem] md:w-full bg-white shadow-lg z-20 mt-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
                                     {parentCategory
                                         .filter(subHeaderTab => subHeaderTab.grand_category_id === headerTab.id)
                                         .map(subHeaderTab => (
-                                            <div key={subHeaderTab.id} className=''>
+                                            <div key={subHeaderTab.id}>
                                                 <Image
                                                     priority
                                                     width={1000}
@@ -223,25 +219,24 @@ const Header = () => {
                                                 />
                                                 <Link
                                                     href={{
-                                                        pathname: `/products`,
+                                                        pathname: '/products',
                                                         query: {
                                                             grand_category: headerTab.name,
                                                             parent_category: subHeaderTab.name.toLowerCase(),
                                                         },
                                                     }}
                                                     className="block px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-                                                    onClick={closeDropdown}  // Close dropdown when clicked
+                                                    onClick={closeDropdown}
                                                 >
                                                     {subHeaderTab.name}
                                                 </Link>
-                                                {/* Render child categories if they exist */}
                                                 {childCategories
                                                     .filter(child => child.parent_category_id === subHeaderTab.id)
                                                     .map(child => (
                                                         <Link
                                                             key={child.id}
                                                             href={{
-                                                                pathname: `/products`,
+                                                                pathname: '/products',
                                                                 query: {
                                                                     grand_category: headerTab.name,
                                                                     parent_category: subHeaderTab.name.toLowerCase(),
@@ -249,7 +244,7 @@ const Header = () => {
                                                                 },
                                                             }}
                                                             className="block px-4 py-1 ml-4 text-gray-600 hover:bg-gray-100"
-                                                            onClick={closeDropdown}  // Close dropdown when clicked
+                                                            onClick={closeDropdown}
                                                         >
                                                             {child.name}
                                                         </Link>
@@ -259,42 +254,25 @@ const Header = () => {
                                 </div>
                             </div>
                         )}
+
                     </div>
                 ))}
+
+                <Link href="/products" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Промышленный анализ</Link>
+                <Link href="/products" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Лабораторное оборудование</Link>
                 <div className="relative group">
-                    <Link href='/products'
-                        className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 "
-                    >
-                        Промышленный анализ
-                    </Link>
-                    {/* <div
-                        className="absolute hidden group-hover:block z-20 left-0 w-48 bg-white border rounded shadow-lg"
-                    >
-                        <Link href="/industrial/analysis1" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 1</Link>
-                        <Link href="/industrial/analysis2" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 2</Link>
-                        <Link href="/industrial/analysis3" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Analysis 3</Link>
-                    </div> */}
-                </div>
-                <Link href="/products" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Лабораторное оборудование</Link>
-                <div className="relative group">
-                    <div
-                        className="text-gray-700  hover:bg-primary_blue hover:text-white px-3 py-3"
-                    >
+                    <div className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">
                         Проекты
                     </div>
-                    <div
-                        className="absolute hidden group-hover:block z-20 left-0  w-48 bg-white border rounded shadow-lg"
-                    >
-
+                    <div className="absolute hidden group-hover:block z-20 right-0 w-48 bg-white border rounded shadow-lg">
                         <Link href="/projects/lab-projects" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Лабораторное проекты</Link>
                         <Link href="/projects" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Промышленные проекты</Link>
                     </div>
-                </div>                <Link href="/services/servisnoe-obsluzhivanie-vashikh-priborov" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Сервис центр</Link>
-                <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Акции</Link>
-                <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Новости</Link>
-                <Link href="/contacts" className="text-gray-700 hover:bg-primary_blue hover:text-white px-3 py-3 ">Контакты</Link>
-
-
+                </div>
+                <Link href="/services/servisnoe-obsluzhivanie-vashikh-priborov" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Сервис центр</Link>
+                <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Акции</Link>
+                <Link href="/blog" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Новости</Link>
+                <Link href="/contacts" className="text-gray-700 hover:bg-primary_blue hover:text-white px-2 py-2 sm:px-3 sm:py-3">Контакты</Link>
             </nav>
         </header>
     )

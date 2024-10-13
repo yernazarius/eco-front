@@ -4,8 +4,7 @@ import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 interface Product {
@@ -102,7 +101,6 @@ function ProductsPageContent() {
             try {
                 const response = await AxiosDefault.get('/brands')
                 setBrands(response.data.data)
-                console.log('brands', response.data.data)
             } catch (error) {
                 console.error('Ошибка при загрузке брендов:', error)
             } finally {
@@ -196,10 +194,11 @@ function ProductsPageContent() {
     }
 
     return (
-        <div className="container mx-auto  mt-12">
-            <div className="container mx-auto px-4 flex">
-                <aside className="w-1/4 pr-8">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800">Категории</h2>
+        <div className="container mx-auto mt-8 md:mt-12">
+            <div className="flex flex-col md:flex-row mx-auto px-4 md:px-6 lg:px-8">
+                {/* Sidebar */}
+                <aside className="w-full md:w-1/4 mb-8 md:mb-0 md:pr-8 text-center md:text-left">
+                    <h2 className="text-xl md:text-2xl font-bold mb-4 text-gray-800">Категории</h2>
                     <ul>
                         <li
                             className={`mb-2 ${!parentCategory && !childCategory ? 'font-bold' : ''}`}
@@ -226,7 +225,7 @@ function ProductsPageContent() {
                                             </button>
                                             <ul className="pl-4">
                                                 {parentCategory.child_categories.map(childCategory => (
-                                                    <li key={childCategory.id} className="mb-2 text-left">
+                                                    <li key={childCategory.id} className="mb-2 text-center md:text-left">
                                                         <button
                                                             className={`text-gray-600 hover:text-gray-800 transition-transform transform active:scale-95 ${childCategory.name.toLowerCase() === searchParams.get('child_category') ? 'font-bold' : ''}`}
                                                             onClick={() =>
@@ -244,7 +243,9 @@ function ProductsPageContent() {
                             </li>
                         ))}
                     </ul>
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800 mt-8">Бренды</h2>
+
+                    {/* Brands */}
+                    <h2 className="text-xl md:text-2xl font-bold mb-4 text-gray-800 mt-8">Бренды</h2>
                     <ul>
                         <li
                             className={`mb-2 ${!selectedBrand ? 'font-bold' : ''}`}
@@ -264,9 +265,11 @@ function ProductsPageContent() {
                         ))}
                     </ul>
                 </aside>
-                <main className="w-3/4">
-                    <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 flex items-center justify-center">
-                        <ShoppingCart className="w-8 h-8 mr-2" />
+
+                {/* Main Content */}
+                <main className="w-full md:w-3/4">
+                    <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center text-gray-800 flex items-center justify-center">
+                        <ShoppingCart className="w-6 h-6 md:w-8 md:h-8 mr-2" />
                         Продукция
                     </h1>
                     <form onSubmit={handleSearch} className="mb-8 flex justify-center">
@@ -275,11 +278,12 @@ function ProductsPageContent() {
                             placeholder="Search by name..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="px-4 py-2 border rounded-md w-1/2"
+                            className="px-4 py-2 border rounded-md w-full md:w-1/2"
                         />
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2 transition-transform transform active:scale-95">Search</button>
                     </form>
-                    <TransitionGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <TransitionGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {searchResults.map(product => (
                             <CSSTransition
                                 key={product.id}
@@ -294,7 +298,7 @@ function ProductsPageContent() {
                                                 height={500}
                                                 src={`${process.env.NEXT_PUBLIC_S3_URL}${product.thumbnail}`}
                                                 alt={product.title}
-                                                className="w-full  rounded mb-4"
+                                                className="w-full h-auto object-contain rounded mb-4"
                                             />
                                             <h2 className="text-md font-bold mb-2">{product.title}</h2>
                                             <p className="text-gray-900 font-semibold mb-2">{product.price}тг</p>

@@ -22,7 +22,6 @@ const projects = [
 		desc: 'Оснащение лабораторного комплекса контроля качества воды',
 		client: 'Заказчик: Завод "Акваника"',
 		link: '/projects/project-2'
-
 	},
 	{
 		src: '/projects/cf34cf363a11251c9b95e36e02f45288.png',
@@ -31,35 +30,38 @@ const projects = [
 		desc: 'Проект по строительству лабораторного комплекса',
 		client: 'Заказчик: ООО "КАРГИЛЛ"',
 		link: '/projects/project-3'
-
 	},
-
 ]
 
 export default function HistoryPage() {
 	return (
-		<div className="md:w-3/4 w-full">
+		<div className="w-full md:w-3/4 mx-auto px-4">
+			{/* Breadcrumb */}
 			<div className="text-sm text-gray-500 my-4">
 				<Link href="/"><span>Главная</span></Link> | <Link href="/services"><span>Проекты</span></Link>
 			</div>
-			<h1 className="text-4xl font-medium mb-6">Лабораторные проекты
-			</h1>
-			<p className='text-primary_text'>
+			{/* Title */}
+			<h1 className="text-3xl sm:text-4xl font-medium mb-6">Лабораторные проекты</h1>
+			{/* Description */}
+			<p className="text-primary_text mb-8">
 				За 30 лет работы наша компания накопила огромный опыт, как в полном оснащении производственных лабораторий, так и в реализации крупных промышленных проектов, таких как обеспечение бесперебойной работы оборудования в процессах водоподготовки и очистки сточных вод. В данном разделе вы можете ознакомиться с самыми масштабными реализованными проектами.
 			</p>
-			<div className="container mx-auto px-4 py-8">
-				<div className="flex flex-wrap gap-3 space-x-4">
+			{/* Project Cards */}
+			<div className="container mx-auto py-8">
+				<div className="flex flex-wrap justify-between gap-4">
 					{projects.map((project, index) => (
-						<Link href={project.link} key={index} className='border w-[30%] flex flex-col mb-6'>
-							<div className='flex flex-col h-full'>
+						<Link href={project.link} key={index} className="border w-full md:w-[30%] flex flex-col mb-6">
+							<div className="flex flex-col h-full">
+								{/* Image */}
 								<div className="relative w-full h-48">
 									<Image src={project.src} layout="fill" objectFit="cover" className="rounded" alt={project.alt} />
 								</div>
-								<div className='px-2 pb-12'>
-									<h2 className='text-center font-medium mt-5'>{project.title}</h2>
-									<p className='text-primary_text text-center text-sm mt-2'>{project.desc}</p>
-									<div className='bg-primary_blue w-1/4 h-[.2rem] mx-auto mt-3 rounded-md'></div>
-									<p className='text-primary_text text-center text-sm mt-2'>{project.client}</p>
+								{/* Text content */}
+								<div className="px-2 pb-8">
+									<h2 className="text-center font-medium mt-5 text-lg">{project.title}</h2>
+									<p className="text-primary_text text-center text-sm mt-2">{project.desc}</p>
+									<div className="bg-primary_blue w-1/4 h-[.2rem] mx-auto mt-3 rounded-md"></div>
+									<p className="text-primary_text text-center text-sm mt-2">{project.client}</p>
 								</div>
 							</div>
 						</Link>

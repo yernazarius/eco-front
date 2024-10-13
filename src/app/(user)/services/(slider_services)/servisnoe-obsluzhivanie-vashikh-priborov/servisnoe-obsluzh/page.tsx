@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ServisnoeObsluzhivaniePage() {
 	return (
-		<div className="container mx-auto mt-10">
+		<div className="container mx-auto mt-10 px-4">
 			{/* Breadcrumbs */}
 			<div className="text-sm text-gray-500 my-4">
 				<Link href="/"><span>Главная</span></Link>  | <Link href="/services"><span>Услуги</span></Link> | <Link href="/services/servisnoe-obsluzhivanie-vashikh-priborov"><span>Сервисное обслуживание ваших приборов</span></Link> | <span>Сервисное обслуживание</span>
