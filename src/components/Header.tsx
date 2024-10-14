@@ -126,14 +126,14 @@ const Header = () => {
                     <Image width={180} height={36} src="/logo.png" alt="Logo" className="w-full h-8 sm:h-12 mr-2 sm:mr-4" />
                 </Link>
 
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
                     <form onSubmit={handleSearch} className="flex items-center relative">
                         <input
                             type="text"
                             placeholder="Search by name..."
                             value={searchQuery}
                             onChange={handleSearchInput}
-                            className="px-4 py-2 border rounded-md text-sm sm:text-base"
+                            className="px-4 py-2 border w-full rounded-md text-sm sm:text-base"
                         />
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded ml-2">Поиск</button>
 
@@ -172,11 +172,11 @@ const Header = () => {
                     </form>
 
                     {/* Contact Info */}
-                    <div className="hidden sm:flex items-baseline flex-col text-left justify-center ml-4">
+                    <div className="hidden md:flex items-baseline flex-col text-left justify-center ml-4">
                         <a href="tel:+74957452290" className="text-gray-700">+7 (707) 524 68 68</a>
                         <a href="mailto:mail@ecoinstrument.ru" className="ml-2 text-blue-500">info@ecoinstrument.kz</a>
                     </div>
-                    <Link href="tel:+77075246868" className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded text-sm sm:text-base">
+                    <Link href="tel:+77075246868" className="px-1 py-1 md:px-4 md:py-2 bg-blue-500 text-white rounded text-sm sm:text-base">
                         Задать вопрос
                     </Link>
                 </div>
