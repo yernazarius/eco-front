@@ -198,13 +198,13 @@ const Header = () => {
                     <div key={headerTab.id} className="relative group z-20 ">
                         <button
                             onClick={() => handleCategoryClick(headerTab.id)}
-                            className={`px-2 py-2 sm:px-3 sm:py-3 ${selectedCategory === headerTab.id ? 'font-bold bg-blue-600 text-white' : 'text-gray-700 hover:text-white hover:bg-primary_blue'}`}
+                            className={`px-2 py-2 sm:px-3 sm:py-3 ${selectedCategory === headerTab.id ? ' bg-primary_blue text-white' : 'text-gray-700 hover:text-white hover:bg-primary_blue'}`}
                         >
                             {headerTab.name}
                         </button>
                         {selectedCategory === headerTab.id && (
-                            <div className="absolute left-0 w-[8rem] md:w-full bg-white shadow-lg z-20 mt-2">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+                            <div className="absolute left-0 w-[8rem] lg:w-[14rem] md:w-full bg-white shadow-lg z-20 mt-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 p-4">
                                     {parentCategory
                                         .filter(subHeaderTab => subHeaderTab.grand_category_id === headerTab.id)
                                         .map(subHeaderTab => (
